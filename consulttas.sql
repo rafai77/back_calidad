@@ -1,4 +1,6 @@
 use calidad;
+select SUM(num_color3),fecha from registros  WHERE fecha BETWEEN "2020-08-06 00:00" AND "2020-08-10 23:59"
+SELECT id_inve FROM user_iver WHERE id_user = 6
 show tables
 select * from invernaderos
 ---Obtener los nombres de las columnas
@@ -38,11 +40,51 @@ INSERT INTO invernaderos VALUES
  3, "Invernadero-3", "Pimiento"
 );
 
+
+
+
+use calidad;
+insert into totales11(fecha,num_color3,num_color4,num_color5,tamchico,Brix,Brix2,pudricion,
+    tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,
+    viruz ) SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(num_color3),sum(num_color4),sum(num_color5),sum(tamchico),sum(Brix),sum(Brix2),sum(pudricion),sum(tallo),sum(flojo),sum(mecanico),sum(blossom),sum(reventado),
+sum(cierre),sum(deforme),sum(cicatriz),sum(insecto),
+sum(color_disparejo),sum(caliz),sum(viruz) from registros where fecha BETWEEN "2020-08-10 00:00:00"and "2020-08-10 23:59:59";
+
 INSERT INTO invernaderos VALUES
 ( 
  16, "Invernadero-16", "tomate"
 );
+use calidad;
+select num_color3,fecha from totales11 where fecha BETWEEN '2020-08-10 00:00:00' and '2020-08-10 23:59:59'
+SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha sum(num_color3)num_color3,sum(num_color4)as num_color4,sum(num_color5)num_color5,sum(tamchico)as tamchico,sum(Brix)as Brix,sum(Brix2)as Brix2,sum(pudricion)as pudricion,sum(tallo)as tallo,sum(flojo) as flojo,sum(mecanico)as mecanico,sum(blossom)as blossom,sum(reventado)as reventado,sum(cierre)as cierre,sum(deforme)as deforme,sum(cicatriz)as cicatriz,sum(insecto)as insecto,sum(color_disparejo)as color_disparejo,sum(caliz)as caliz,sum(viruz)asviruz  from registros where fecha BETWEEN "2020-08-12 00:00:00" and "2020-08-12 23:59:00"
 
+
+SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(num_color3)num_color3,sum(num_color4)as num_color4,sum(num_color5)num_color5,sum(tamchico)as tamchico,sum(Brix)as Brix,sum(Brix2)as Brix2,sum(pudricion)as pudricion,sum(tallo)as tallo,sum(flojo) as flojo,sum(mecanico)as mecanico,sum(blossom)as blossom,sum(reventado)as reventado,sum(cierre)as cierre,sum(deforme)as deforme,sum(cicatriz)as cicatriz,sum(insecto)as insecto,sum(color_disparejo)as color_disparejo,sum(caliz)as caliz,sum(viruz)asviruz  from registros where fecha BETWEEN "2020-08-12 00:00:00" and "2020-08-12 23:59:00"
+create TABLE totales11
+(
+    i_total int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    fecha date not null,
+    num_color3 INT NOT NULL,
+    num_color4 INT NOT NULL,
+    num_color5 INT NOT NULL,
+    tamchico INT NOT NULL,
+    Brix  DECIMAL(5,2)  NULL,
+    Brix2  DECIMAL(5,2)  NULL,
+    pudricion INT NOT NULL,
+    tallo INT NOT NULL,
+    flojo INT NOT NULL,
+    mecanico INT NOT NULL,
+    blossom INT NOT NULL,
+    reventado INT NOT NULL,
+    cierre INT NOT NULL,
+    deforme INT NOT NULL,
+    cicatriz INT NOT NULL,
+    insecto INT NOT NULL,
+    color_disparejo INT NOT NULL,
+    caliz INT NOT NULL,
+    viruz INT NOT NULL,
+    UNIQUE (fecha)
+);
 use calidad;
 drop table user_iver
 CREATE TABLE user_iver
