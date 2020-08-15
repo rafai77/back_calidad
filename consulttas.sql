@@ -223,3 +223,38 @@ CREATE TABLE registros12
     FOREIGN KEY (id_user) REFERENCES usuarios(id_user),
     FOREIGN KEY (id_inve) REFERENCES invernaderos(id_inver)
 );
+
+
+
+use calidad;
+create TABLE totales12
+(
+    i_total int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    fecha date not null,
+    num_color3 INT NOT NULL,
+    num_color4 INT NOT NULL,
+    num_color5 INT NOT NULL,
+    tamchico INT NOT NULL,
+    Brix1  DECIMAL(5,2)  NULL,
+    Brix2  DECIMAL(5,2)  NULL,
+    Brix3  DECIMAL(5,2)  NULL,
+    Brix4  DECIMAL(5,2)  NULL,
+    peso   DECIMAL(5,2)  NULL,
+    pudricion INT NOT NULL,
+    tallo INT NOT NULL,
+    flojo INT NOT NULL,
+    mecanico INT NOT NULL,
+    blossom INT NOT NULL,
+    reventado INT NOT NULL,
+    cierre INT NOT NULL,
+    deforme INT NOT NULL,
+    cicatriz INT NOT NULL,
+    insecto INT NOT NULL,
+    color_disparejo INT NOT NULL,
+    caliz INT NOT NULL,
+    viruz INT NOT NULL,
+    UNIQUE (fecha)
+);
+
+use calidad;
+select num_color3,num_color4,num_color5,Brix1,Brix2,Brix3,Brix4,DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha from totales12 where fecha BETWEEN '2020-08-06 00:00:00' and '2020-08-14 23:59:59'

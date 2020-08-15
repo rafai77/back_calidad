@@ -27,6 +27,55 @@ var secret="1234abc"
 var idu
 
 
+app.post('/infocolum12', verificaTk, (req, res)=> {
+  jwt.verify(req.token,secret,(err,data)=>
+    {
+      if(err)
+      {
+       
+        res.sendStatus(403);
+      }
+      else
+      {
+        var c=req.body.c;
+        var f1=req.body.f1.substr(0,10)+" 00:00:00";
+        var f2=req.body.f2.substr(0,10)+" 23:59:59";
+        //console.log(c);
+        var resul=[]
+        var sql="";
+        var campos=""
+        var aux;
+        for(var i in c)
+        {
+           campos+=c[i]+","
+        }
+        sql="select "+campos+"DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha from totales12 where fecha BETWEEN '"+f1+"' and '"+f2+"' ";
+        console.log(sql);
+        mysqlConnection.query(sql, function(error, results, fields) {
+         // console.log(results)
+          for (var i in results)
+          {
+            for(var j in results[i])
+            {
+              if(j!='fecha')
+              {
+                resul.push(
+                  {
+                    "fecha":results[i]["fecha"],
+                    "campo":j,
+                    "valor":results[i][j]
+                  }
+                );
+              }
+            }
+          }
+          console.log(resul);
+         res.json(resul);
+         });
+  };
+  });
+});
+
 // devuelve la informacion de alguna columna intervalos de fechsa
 app.post('/infocolum', verificaTk, (req, res)=> {
   jwt.verify(req.token,secret,(err,data)=>
@@ -41,16 +90,38 @@ app.post('/infocolum', verificaTk, (req, res)=> {
         var c=req.body.c;
         var f1=req.body.f1+" 00:00:00";
         var f2=req.body.f2+" 23:59:59";
-        var sql="select "+c+",fecha from totales11 where fecha BETWEEN '"+f1+"' and '"+f2+"'";
-        console.log(sql);
+        console.log(f1,f2);
+        var resul=[]
+        var sql="";
+        var campos=""
+        var aux;
+        for(var i in c)
+        {
+           campos+=c[i]+","
+        }
+        sql="select "+campos+"DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha from totales11 where fecha BETWEEN '"+f1+"' and '"+f2+"' ";
+       //console.log(sql);
         mysqlConnection.query(sql, function(error, results, fields) {
-          console.log(results);
-          res.json(
+         // console.log(results)
+          for (var i in results)
+          {
+            for(var j in results[i])
             {
-            "campo":c,
-            "datos":results,
-          });
-    });
+              if(j!='fecha')
+              {
+                resul.push(
+                  {
+                    "fecha":results[i]["fecha"],
+                    "campo":j,
+                    "valor":results[i][j]
+                  }
+                );
+              }
+            }
+          }
+          console.log(resul);
+         res.json(resul);
+         });
   };
   });
 });
@@ -758,23 +829,64 @@ app.post('/addC12', verificaTk, (req, res)=> {
         i++;
         
     }
-    console.log(i);
+    console.log(f);
+    var f1=f;
+    f1=f.split(" ");
     f=f.substr(10);
+    f1=f1[0];
     console.log(f);
     regi[i]=f;
-    console.log(regi);
+    var f2=f1
+    f1+=" 00:00:00";
+    f2+=" 23:59:00";    
+    console.log(f1,f2);
       //console.log(data);
       mysqlConnection.query('INSERT INTO registros12(id_user,id_inve,num_tunel,num_color3,num_color4,num_color5,tamchico,Brix1,Brix2,Brix3,Brix4,peso,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz,fecha,tiempo) VALUES(?)', [regi], function(error, results, fields) {
         if(!error)
         {
-          res.json(
+          mysqlConnection.query('select * from totales12 where fecha BETWEEN ? and ?',[f1,f2], function(error, results, fields) {
+          
+            if(results.length==0)
             {
-              Id_user: `${idu}`,
-              error: false,
-              status: 'surco agregado'
-    
+              // se crea el registro 
+              mysqlConnection.query("insert into totales12(fecha,num_color3,num_color4,num_color5,tamchico,Brix1,Brix2,Brix3,Brix4,peso,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz ) SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(num_color3),sum(num_color4),sum(num_color5),sum(tamchico),sum(Brix1),sum(Brix2),sum(Brix3),sum(Brix4),sum(peso),sum(pudricion),sum(tallo),sum(flojo),sum(mecanico),sum(blossom),sum(reventado),sum(cierre),sum(deforme),sum(cicatriz),sum(insecto),sum(color_disparejo),sum(caliz),sum(viruz) from registros12 where fecha BETWEEN ? and ?",[f1,f2], function(error, results, fields) {   
+                console.log(results);
+              });
+              console.log("no existe el registro del total para ese dia");
             }
-          )
+            else
+            {
+              mysqlConnection.query("SELECT sum(num_color3)num_color3,sum(num_color4)as num_color4,sum(num_color5)num_color5,sum(tamchico)as tamchico,sum(Brix1)as Brix1,sum(Brix2)as Brix2,sum(Brix3)as Brix3,sum(Brix4)as Brix4,sum(peso)as peso,sum(pudricion)as pudricion,sum(tallo)as tallo,sum(flojo) as flojo,sum(mecanico)as mecanico,sum(blossom)as blossom,sum(reventado)as reventado,sum(cierre)as cierre,sum(deforme)as deforme,sum(cicatriz)as cicatriz,sum(insecto)as insecto,sum(color_disparejo)as color_disparejo,sum(caliz)as caliz,sum(viruz)as viruz  from registros12 where fecha BETWEEN ? and ?",[f1,f2], function(error, row, fields) {   
+                //actualiza
+                console.log(row)
+                var regi="";
+                var i=0;
+                for (var prop in row[0])
+                {
+                  regi+=prop+"="+row[0][prop]+",";
+                }
+                regi=regi.substr(0,regi.length-1);
+                console.log(regi);
+                regi="UPDATE totales12 set "+regi+" where fecha BETWEEN '"+f1+"' and '"+f2+"'"
+                console.log(regi);
+                mysqlConnection.query(regi, function(error, results, fields) {
+                console.log(results);
+  
+                });
+  
+                console.log(results);
+              });
+              console.log("solo se debe actualizar ");
+            }
+            });
+            res.json(
+              {
+                Id_user: `${idu}`,
+                error: false,
+                status: 'surco agregado'
+      
+              }
+            )
         }
         else
         {
