@@ -156,7 +156,7 @@ app.post('/datos12', verificaTk, (req, res)=> {
           mydatef+=" 23:59:59"
           console.log(mydatei);
           console.log(mydatef);
-          mysqlConnection.query("select R.id_reg,U.user,I.Nombre,R.num_tunel,R.num_color3,R.num_color4,R.num_color5,R.tamchico,R.Brix1,R.Brix3,R.Brix1,R.Brix4,R.peso,R.pudricion,R.tallo,R.flojo,R.mecanico,R.blossom,R.reventado,R.cierre,R.deforme,R.cicatriz,R.insecto,R.color_disparejo,R.caliz,R.viruz,R.fecha,R.tiempo from registros12 R,usuarios U,invernaderos I where R.id_user=U.id_user and R.id_inve=I.id_inver and R.id_inve=? and fecha BETWEEN ? AND ?",[idi,mydatei,mydatef], function(error, results, fields) {
+          mysqlConnection.query("select R.id_reg,U.user,I.Nombre,R.num_tunel,R.num_color3,R.num_color4,R.num_color5,R.tamchico,R.lado,R.peso,R.pudricion,R.tallo,R.flojo,R.mecanico,R.blossom,R.reventado,R.cierre,R.deforme,R.cicatriz,R.insecto,R.color_disparejo,R.caliz,R.viruz,R.fecha,R.tiempo from registros12 R,usuarios U,invernaderos I where R.id_user=U.id_user and R.id_inve=I.id_inver and R.id_inve=? and fecha BETWEEN ? AND ?",[idi,mydatei,mydatef], function(error, results, fields) {
             if (results.length>0) // quiere decir que se econtro un usuario
         {
           console.log(results);
@@ -217,7 +217,7 @@ app.post('/datos', verificaTk, (req, res)=> {
           mydatef+=" 23:59:59"
           console.log(mydatei);
           console.log(mydatef);
-          mysqlConnection.query("select R.id_reg,U.user,I.Nombre,R.num_tunel,R.num_color3,R.num_color4,R.num_color5,R.tamchico,R.Brix,R.Brix2,R.pudricion,R.tallo,R.flojo,R.mecanico,R.blossom,R.reventado,R.cierre,R.deforme,R.cicatriz,R.insecto,R.color_disparejo,R.caliz,R.viruz,DATE_FORMAT(R.fecha ,'%Y-%m-%d') as '\tFecha',R.tiempo from registros R,usuarios U,invernaderos I where R.id_user=U.id_user and R.id_inve=I.id_inver and R.id_inve=? and fecha BETWEEN ? AND ?",[idi,mydatei,mydatef], function(error, results, fields) {
+          mysqlConnection.query("select R.id_reg,U.user,I.Nombre,R.num_tunel,R.num_color3,R.num_color4,R.num_color5,R.tamchico,R.lado,R.pudricion,R.tallo,R.flojo,R.mecanico,R.blossom,R.reventado,R.cierre,R.deforme,R.cicatriz,R.insecto,R.color_disparejo,R.caliz,R.viruz,DATE_FORMAT(R.fecha ,'%Y-%m-%d') as '\tFecha',R.tiempo from registros R,usuarios U,invernaderos I where R.id_user=U.id_user and R.id_inve=I.id_inver and R.id_inve=? and fecha BETWEEN ? AND ?",[idi,mydatei,mydatef], function(error, results, fields) {
             if (results.length>0) // quiere decir que se econtro un usuario
         {
           console.log(results);
@@ -612,7 +612,7 @@ app.post('/addC', verificaTk, (req, res)=> {
     f2+=" 23:59:00";    
     console.log(f1,f2);
       //console.log(data);
-      mysqlConnection.query('INSERT INTO registros(id_user,id_inve,num_tunel,num_color3,num_color4,num_color5,tamchico,Brix,Brix2,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz,fecha,tiempo) VALUES(?)', [regi], function(error, results, fields) {
+      mysqlConnection.query('INSERT INTO registros(id_user,id_inve,num_tunel,num_color3,num_color4,num_color5,tamchico,lado,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz,fecha,tiempo) VALUES(?)', [regi], function(error, results, fields) {
         if(!error)
         {
           //actualizar el total 
@@ -621,14 +621,14 @@ app.post('/addC', verificaTk, (req, res)=> {
           if(results.length==0)
           {
             // se crea el registro 
-            mysqlConnection.query("insert into totales11(fecha,num_color3,num_color4,num_color5,tamchico,Brix,Brix2,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz ) SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(num_color3),sum(num_color4),sum(num_color5),sum(tamchico),sum(Brix),sum(Brix2),sum(pudricion),sum(tallo),sum(flojo),sum(mecanico),sum(blossom),sum(reventado),sum(cierre),sum(deforme),sum(cicatriz),sum(insecto),sum(color_disparejo),sum(caliz),sum(viruz) from registros where fecha BETWEEN ? and ?",[f1,f2], function(error, results, fields) {   
+            mysqlConnection.query("insert into totales11(fecha,num_color3,num_color4,num_color5,tamchico,Brix,Brix2,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz ) SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(num_color3),sum(num_color4),sum(num_color5),sum(tamchico),sum(0),sum(Brix2),sum(pudricion),sum(tallo),sum(flojo),sum(mecanico),sum(blossom),sum(reventado),sum(cierre),sum(deforme),sum(cicatriz),sum(insecto),sum(color_disparejo),sum(caliz),sum(viruz) from registros where fecha BETWEEN ? and ?",[f1,f2], function(error, results, fields) {   
               console.log(results);
             });
             console.log("no existe el registro del total para ese dia");
           }
           else
           {
-            mysqlConnection.query("SELECT sum(num_color3)num_color3,sum(num_color4)as num_color4,sum(num_color5)num_color5,sum(tamchico)as tamchico,sum(Brix)as Brix,sum(Brix2)as Brix2,sum(pudricion)as pudricion,sum(tallo)as tallo,sum(flojo) as flojo,sum(mecanico)as mecanico,sum(blossom)as blossom,sum(reventado)as reventado,sum(cierre)as cierre,sum(deforme)as deforme,sum(cicatriz)as cicatriz,sum(insecto)as insecto,sum(color_disparejo)as color_disparejo,sum(caliz)as caliz,sum(viruz)as viruz  from registros where fecha BETWEEN ? and ?",[f1,f2], function(error, row, fields) {   
+            mysqlConnection.query("SELECT sum(num_color3)num_color3,sum(num_color4)as num_color4,sum(num_color5)num_color5,sum(tamchico)as tamchico,sum(0)as Brix,sum(0)as Brix2,sum(pudricion)as pudricion,sum(tallo)as tallo,sum(flojo) as flojo,sum(mecanico)as mecanico,sum(blossom)as blossom,sum(reventado)as reventado,sum(cierre)as cierre,sum(deforme)as deforme,sum(cicatriz)as cicatriz,sum(insecto)as insecto,sum(color_disparejo)as color_disparejo,sum(caliz)as caliz,sum(viruz)as viruz  from registros where fecha BETWEEN ? and ?",[f1,f2], function(error, row, fields) {   
               //actualiza
               console.log(row)
               var regi="";
@@ -840,7 +840,7 @@ app.post('/addC12', verificaTk, (req, res)=> {
     f2+=" 23:59:00";    
     console.log(f1,f2);
       //console.log(data);
-      mysqlConnection.query('INSERT INTO registros12(id_user,id_inve,num_tunel,num_color3,num_color4,num_color5,tamchico,Brix1,Brix2,Brix3,Brix4,peso,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz,fecha,tiempo) VALUES(?)', [regi], function(error, results, fields) {
+      mysqlConnection.query('INSERT INTO registros12(id_user,id_inve,num_tunel,num_color3,num_color4,num_color5,tamchico,lado,peso,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz,fecha,tiempo) VALUES(?)', [regi], function(error, results, fields) {
         if(!error)
         {
           mysqlConnection.query('select * from totales12 where fecha BETWEEN ? and ?',[f1,f2], function(error, results, fields) {
@@ -848,14 +848,14 @@ app.post('/addC12', verificaTk, (req, res)=> {
             if(results.length==0)
             {
               // se crea el registro 
-              mysqlConnection.query("insert into totales12(fecha,num_color3,num_color4,num_color5,tamchico,Brix1,Brix2,Brix3,Brix4,peso,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz ) SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(num_color3),sum(num_color4),sum(num_color5),sum(tamchico),sum(Brix1),sum(Brix2),sum(Brix3),sum(Brix4),sum(peso),sum(pudricion),sum(tallo),sum(flojo),sum(mecanico),sum(blossom),sum(reventado),sum(cierre),sum(deforme),sum(cicatriz),sum(insecto),sum(color_disparejo),sum(caliz),sum(viruz) from registros12 where fecha BETWEEN ? and ?",[f1,f2], function(error, results, fields) {   
+              mysqlConnection.query("insert into totales12(fecha,num_color3,num_color4,num_color5,tamchico,Brix1,Brix2,Brix3,Brix4,peso,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz ) SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(num_color3),sum(num_color4),sum(num_color5),sum(tamchico),sum(0),sum(0),sum(0),sum(0),sum(peso),sum(pudricion),sum(tallo),sum(flojo),sum(mecanico),sum(blossom),sum(reventado),sum(cierre),sum(deforme),sum(cicatriz),sum(insecto),sum(color_disparejo),sum(caliz),sum(viruz) from registros12 where fecha BETWEEN ? and ?",[f1,f2], function(error, results, fields) {   
                 console.log(results);
               });
               console.log("no existe el registro del total para ese dia");
             }
             else
             {
-              mysqlConnection.query("SELECT sum(num_color3)num_color3,sum(num_color4)as num_color4,sum(num_color5)num_color5,sum(tamchico)as tamchico,sum(Brix1)as Brix1,sum(Brix2)as Brix2,sum(Brix3)as Brix3,sum(Brix4)as Brix4,sum(peso)as peso,sum(pudricion)as pudricion,sum(tallo)as tallo,sum(flojo) as flojo,sum(mecanico)as mecanico,sum(blossom)as blossom,sum(reventado)as reventado,sum(cierre)as cierre,sum(deforme)as deforme,sum(cicatriz)as cicatriz,sum(insecto)as insecto,sum(color_disparejo)as color_disparejo,sum(caliz)as caliz,sum(viruz)as viruz  from registros12 where fecha BETWEEN ? and ?",[f1,f2], function(error, row, fields) {   
+              mysqlConnection.query("SELECT sum(num_color3)num_color3,sum(num_color4)as num_color4,sum(num_color5)num_color5,sum(tamchico)as tamchico,sum(0)as Brix1,sum(0)as Brix2,sum(0)as Brix3,sum(0)as Brix4,sum(peso)as peso,sum(pudricion)as pudricion,sum(tallo)as tallo,sum(flojo) as flojo,sum(mecanico)as mecanico,sum(blossom)as blossom,sum(reventado)as reventado,sum(cierre)as cierre,sum(deforme)as deforme,sum(cicatriz)as cicatriz,sum(insecto)as insecto,sum(color_disparejo)as color_disparejo,sum(caliz)as caliz,sum(viruz)as viruz  from registros12 where fecha BETWEEN ? and ?",[f1,f2], function(error, row, fields) {   
                 //actualiza
                 console.log(row)
                 var regi="";
