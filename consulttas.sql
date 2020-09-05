@@ -256,5 +256,9 @@ create TABLE totales12
     UNIQUE (fecha)
 );
 
-use calidad;
 select num_color3,num_color4,num_color5,Brix1,Brix2,Brix3,Brix4,DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha from totales12 where fecha BETWEEN '2020-08-06 00:00:00' and '2020-08-14 23:59:59'
+
+select t.fecha as c from    ,registros r
+
+use calidad;
+SELECT  t.fecha,COUNT(r.id_user) as cantidad from registros r,totales11 t where t.fecha='2020-09-03' and r.fecha='2020-09-03'

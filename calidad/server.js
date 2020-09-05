@@ -24,7 +24,7 @@ app.options('*', cors());
 var token
 var secret="1234abc"
 var idu
-
+app.listen(PORT, ()=> console.log(`El servidor esta en el puerto: ${PORT}`));
 
 app.post('/infocolum12', verificaTk, (req, res)=> {
   jwt.verify(req.token,secret,(err,data)=>
@@ -621,7 +621,7 @@ app.post('/addC', verificaTk, (req, res)=> {
           if(results.length==0)
           {
             // se crea el registro 
-            mysqlConnection.query("insert into totales11(fecha,num_color3,num_color4,num_color5,tamchico,Brix,Brix2,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz ) SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(num_color3),sum(num_color4),sum(num_color5),sum(tamchico),sum(0),sum(Brix2),sum(pudricion),sum(tallo),sum(flojo),sum(mecanico),sum(blossom),sum(reventado),sum(cierre),sum(deforme),sum(cicatriz),sum(insecto),sum(color_disparejo),sum(caliz),sum(viruz) from registros where fecha BETWEEN ? and ?",[f1,f2], function(error, results, fields) {   
+            mysqlConnection.query("insert into totales11(fecha,num_color3,num_color4,num_color5,tamchico,Brix,Brix2,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz ) SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(num_color3),sum(num_color4),sum(num_color5),sum(tamchico),sum(0),sum(0),sum(pudricion),sum(tallo),sum(flojo),sum(mecanico),sum(blossom),sum(reventado),sum(cierre),sum(deforme),sum(cicatriz),sum(insecto),sum(color_disparejo),sum(caliz),sum(viruz) from registros where fecha BETWEEN ? and ?",[f1,f2], function(error, results, fields) {   
               console.log(results);
             });
             console.log("no existe el registro del total para ese dia");
@@ -1033,6 +1033,48 @@ app.put('/actualizar12/', verificaTk, (req, res)=> {
   });       
 });
 
+app.post('/brix/', verificaTk, (req, res)=> {
+  jwt.verify(req.token,secret,(err,data)=>
+  {
+    if(err)
+    {
+      res.json(
+        {
+          log: false,
+          User: null,
+          error: true,
+          status: 'no se puede actualizar la brix asi iniciar sesion por favor'
+        }
+      )
+    }
+    else
+    {
+      console.log(req.body.fecha.toString())
+      //SELECT  t.fecha,COUNT(r.id_user) as cantidad from registros r,totales11 t where t.fecha='2020-09-03'      
+      mysqlConnection.query("SELECT  t.fecha,COUNT(r.id_user) as cantidad from registros r,totales11 t where t.fecha=? and r.fecha=?",[req.body.fecha.toString(),req.body.fecha.toString()], function(error, results, fields) {
+        if(!error)
+        {
+          res.json(
+            {
+              "fecha":results[0].fecha,
+              "cantidad:":results[0].cantidad,
+            }
+          )
+        }
+        else
+        {
+          console.log(error)
+          res.json("No tiene registros"
+          )
+        }
+
+        
+      });
+    }
+  });       
+});
+
+
 app.delete('/borrar12/:id', verificaTk, (req, res)=> {
   jwt.verify(req.token,secret,(err,data)=>
   {
@@ -1075,4 +1117,5 @@ app.delete('/borrar12/:id', verificaTk, (req, res)=> {
       });
   });       
 });
-app.listen(PORT, ()=> console.log(`Server is up on port: ${PORT}`));
+
+
