@@ -1074,6 +1074,51 @@ app.post('/brix/', verificaTk, (req, res)=> {
   });       
 });
 
+app.put('/blixadd',verificaTk,(req,res)=>
+{
+  jwt.verify(req.token,secret,(err,data)=>
+  {
+    if(err)
+    {
+      res.json(
+        {
+          log: false,
+          User: null,
+          error: true,
+          status: 'no se puede actualizar la brix asi iniciar sesion por favor'
+        }
+      )
+    }
+    else
+    {
+      let sql=`UPDATE ${req.body.tabla} SET Brix=${parseFloat(req.body.Brix)} ,Brix2=${parseFloat(req.body.Brix2)} where fecha='${req.body.fecha}'`;
+      console.log(`UPDATE ${req.body.tabla} SET Brix=${parseFloat(req.body.Brix)} ,Brix2=${parseFloat(req.body.Brix2)} where fecha='${req.body.fecha}'`)
+      mysqlConnection.query(sql,function(error, results, fields) {
+        console.log(error)
+        if(error==null)
+        {
+          res.json({
+            error:false,
+            status:"Brixs Actualizado"
+          });
+        }
+        else
+        {
+          res.json(
+            {
+              error:true,
+              status:"Algo salio mal intentalo mas tarde"
+            }
+          );
+        }
+      });
+      
+     
+    }
+
+  });
+}
+);
 
 app.delete('/borrar12/:id', verificaTk, (req, res)=> {
   jwt.verify(req.token,secret,(err,data)=>

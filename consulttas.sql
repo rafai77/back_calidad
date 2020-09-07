@@ -262,3 +262,5 @@ select t.fecha as c from    ,registros r
 
 use calidad;
 SELECT  t.fecha,COUNT(r.id_user) as cantidad from registros r,totales11 t where t.fecha='2020-09-03' and r.fecha='2020-09-03'
+UPDATE  totales11 SET Brix=10 ,Brix2=5 where fecha='2020-09-03'
+UPDATE totales11 SET Brix=25 ,Brix2=25 where fecha='2020-09-03'
