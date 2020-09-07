@@ -1056,8 +1056,8 @@ app.post('/brix/', verificaTk, (req, res)=> {
         {
           res.json(
             {
-              "fecha":results[0].fecha,
-              "cantidad:":results[0].cantidad,
+              fecha: results[0].fecha,
+              cantidad :results[0].cantidad,
             }
           )
         }
