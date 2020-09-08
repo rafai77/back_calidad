@@ -862,7 +862,7 @@ app.post('/addC12', verificaTk, (req, res)=> {
             }
             else
             {
-              mysqlConnection.query("SELECT sum(num_color3)num_color3,sum(num_color4)as num_color4,sum(num_color5)num_color5,sum(tamchico)as tamchico,sum(0)as Brix1,sum(0)as Brix2,sum(0)as Brix3,sum(0)as Brix4,sum(peso)as peso,sum(pudricion)as pudricion,sum(tallo)as tallo,sum(flojo) as flojo,sum(mecanico)as mecanico,sum(blossom)as blossom,sum(reventado)as reventado,sum(cierre)as cierre,sum(deforme)as deforme,sum(cicatriz)as cicatriz,sum(insecto)as insecto,sum(color_disparejo)as color_disparejo,sum(caliz)as caliz,sum(viruz)as viruz  from registros12 where fecha BETWEEN ? and ?",[f1,f2], function(error, row, fields) {   
+              mysqlConnection.query("SELECT sum(num_color3)num_color3,sum(num_color4)as num_color4,sum(num_color5)num_color5,sum(tamchico)as tamchico,sum(0) as Brix1,sum(0) as Brix2,sum(0) as Brix3,sum(0) as Brix4,sum(peso)as peso,sum(pudricion)as pudricion,sum(tallo)as tallo,sum(flojo) as flojo,sum(mecanico)as mecanico,sum(blossom)as blossom,sum(reventado)as reventado,sum(cierre)as cierre,sum(deforme)as deforme,sum(cicatriz)as cicatriz,sum(insecto)as insecto,sum(color_disparejo)as color_disparejo,sum(caliz)as caliz,sum(viruz)as viruz  from registros12 where fecha BETWEEN ? and ?",[f1,f2], function(error, row, fields) {   
                 //actualiza
                 console.log(row)
                 var regi="";
@@ -997,12 +997,17 @@ app.put('/actualizar12/', verificaTk, (req, res)=> {
       var regi="";
       var i=0;
       for (var prop in data) {
-        if(prop=='fecha')
-        regi+=prop+"='"+data[prop]+"',";
-        else
-        regi+=prop+"="+data[prop]+",";
-        
-    }
+        if(prop=='lado')
+        {
+          regi+=prop+"='"+data[prop]+"',";
+        }
+        else{
+          if(prop=='fecha')
+          regi+=prop+"='"+data[prop]+"',";
+          else
+          regi+=prop+"="+data[prop]+",";
+        }
+      }
     console.log(regi[regi.length-1]);
     regi=regi.substr(0,regi.length-1);
     console.log(regi);
@@ -1169,6 +1174,8 @@ app.delete('/borrar12/:id', verificaTk, (req, res)=> {
       });
   });       
 });
+
+
 
 app.post('/tablatotales/', verificaTk, (req, res)=>
 {
