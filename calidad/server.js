@@ -702,10 +702,17 @@ app.put('/actualizar/', verificaTk, (req, res)=> {
       var regi="";
       var i=0;
       for (var prop in data) {
-        if(prop=='fecha')
-        regi+=prop+"='"+data[prop]+"',";
-        else
-        regi+=prop+"="+data[prop]+",";
+        if(prop=='lado')
+        {
+          regi+=prop+"='"+data[prop]+"',";
+        }
+        else{
+          if(prop=='fecha')
+          regi+=prop+"='"+data[prop]+"',";
+          else
+          regi+=prop+"="+data[prop]+",";
+        }
+        
         
     }
     console.log(regi[regi.length-1]);
@@ -1162,5 +1169,52 @@ app.delete('/borrar12/:id', verificaTk, (req, res)=> {
       });
   });       
 });
+
+app.post('/tablatotales/', verificaTk, (req, res)=>
+{
+  jwt.verify(req.token,secret,(err,data)=>
+  {
+    if(err)
+    {
+      res.json(
+        {
+          log: false,
+          User: null,
+          error: true,
+          status: 'no se puede asi iniciar sesion por favor'
+        }
+      )
+    }
+    else
+    {
+      
+      let sql="SELECT t.*,(num_color3+num_color4+num_color5) as Total FROM "+req.body.tabla+" t where fecha=?"
+      console.log(req.body,sql)
+      mysqlConnection.query(sql,[req.body.fecha],function(error, results, fields) {
+        console.log(error)
+        if(error==null)
+        {
+          res.json({
+            error:false,
+            datos:results
+          });
+        }
+        else
+        {
+          res.json(
+            {
+              error:true,
+              status:"Algo salio mal intentalo mas tarde"
+            }
+          );
+        }
+      });
+      
+     
+    }
+
+  });
+}
+);
 
 

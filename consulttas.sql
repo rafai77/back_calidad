@@ -264,3 +264,10 @@ use calidad;
 SELECT  t.fecha,COUNT(r.id_user) as cantidad from registros r,totales11 t where t.fecha='2020-09-03' and r.fecha='2020-09-03'
 UPDATE  totales11 SET Brix=10 ,Brix2=5 where fecha='2020-09-03'
 UPDATE totales11 SET Brix=25 ,Brix2=25 where fecha='2020-09-03'
+
+
+SELECT t.*,(num_color3+num_color4+num_color5) as Total FROM calidad.totales11 t where fecha='2020-09-03';
+SELECT t.*,(num_color3+num_color4+num_color5) as Total FROM totales11 t
+
+
+SELECT t.Brix2,t.Brix2/(num_color3+num_color4+num_color5) as Total FROM totales11 t
