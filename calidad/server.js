@@ -1223,3 +1223,110 @@ app.post('/tablatotales/', verificaTk, (req, res)=>
 );
 
 
+app.post('/addC16', verificaTk, (req, res)=> {
+  jwt.verify(req.token,secret,(err,data)=>
+  {
+    if(err)
+    {
+      res.json(
+        {
+          log: false,
+          User: null,
+          error: true,
+          status: 'no se puede registrar una caja asi iniciar sesion por favor'
+        }
+      )
+    }
+    else
+    {
+      data=req.body.REG;
+      data=JSON.parse(data);
+      console.log(data);
+      var regi=[];
+      var i=0;
+      var f="";
+      for (var prop in data) {
+        regi[i]=data[prop];
+        if(prop=='fecha')
+        f=data[prop];
+        i++;
+        //console.log(prop,data[prop])
+        
+    }
+    //console.log(f);
+    var f1=f;
+    f1=f.split(" ");
+    f=f.substr(10);
+    f1=f1[0];
+    console.log(f);
+    regi[i]=f;
+    var f2=f1
+    f1+=" 00:00:00";
+    f2+=" 23:59:00";    
+    console.log(f1,f2);
+      //console.log(data);
+      mysqlConnection.query('INSERT INTO registros16(id_user,id_inve,num_tunel,racimo1,racimo2,racimo3,racimo4,racimo5,racimo6,tamchico,peso,pudricion,flojo,mecanico,blossom,cierre,deforme,cicatriz,insecto_daño,insecto_presencia,dano_virus,craking,corte,golpe,exverde,arrugado,blotchy,suelto,color_disparejo,fecha,lado,tiempo) VALUES(?)', [regi], function(error, results, fields) {
+        if(!error)
+        {
+          // mysqlConnection.query('select * from totales12 where fecha BETWEEN ? and ?',[f1,f2], function(error, results, fields) {
+          
+          //   if(results.length==0)
+          //   {
+          //     // se crea el registro 
+          //     mysqlConnection.query("insert into totales12(fecha,num_color3,num_color4,num_color5,tamchico,Brix1,Brix2,Brix3,Brix4,peso,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz ) SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(num_color3),sum(num_color4),sum(num_color5),sum(tamchico),sum(0),sum(0),sum(0),sum(0),sum(peso),sum(pudricion),sum(tallo),sum(flojo),sum(mecanico),sum(blossom),sum(reventado),sum(cierre),sum(deforme),sum(cicatriz),sum(insecto),sum(color_disparejo),sum(caliz),sum(viruz) from registros12 where fecha BETWEEN ? and ?",[f1,f2], function(error, results, fields) {   
+          //       console.log(results);
+          //     });
+          //     console.log("no existe el registro del total para ese dia");
+          //   }
+          //   else
+          //   {
+          //     mysqlConnection.query("SELECT sum(num_color3)num_color3,sum(num_color4)as num_color4,sum(num_color5)num_color5,sum(tamchico)as tamchico,sum(0) as Brix1,sum(0) as Brix2,sum(0) as Brix3,sum(0) as Brix4,sum(peso)as peso,sum(pudricion)as pudricion,sum(tallo)as tallo,sum(flojo) as flojo,sum(mecanico)as mecanico,sum(blossom)as blossom,sum(reventado)as reventado,sum(cierre)as cierre,sum(deforme)as deforme,sum(cicatriz)as cicatriz,sum(insecto)as insecto,sum(color_disparejo)as color_disparejo,sum(caliz)as caliz,sum(viruz)as viruz  from registros12 where fecha BETWEEN ? and ?",[f1,f2], function(error, row, fields) {   
+          //       //actualiza
+          //       console.log(row)
+          //       var regi="";
+          //       var i=0;
+          //       for (var prop in row[0])
+          //       {
+          //         regi+=prop+"="+row[0][prop]+",";
+          //       }
+          //       regi=regi.substr(0,regi.length-1);
+          //       console.log(regi);
+          //       regi="UPDATE totales12 set "+regi+" where fecha BETWEEN '"+f1+"' and '"+f2+"'"
+          //       console.log(regi);
+          //       mysqlConnection.query(regi, function(error, results, fields) {
+          //       console.log(results);
+  
+          //       });
+  
+          //       console.log(results);
+          //     });
+          //     console.log("solo se debe actualizar ");
+          //   }
+          //   });
+            res.json(
+              {
+                Id_user: `${idu}`,
+                error: false,
+                status: 'surco agregado'
+      
+              }
+            )
+        }
+        else
+        {
+          console.log(error)
+          res.json({
+              Cajas: "error",
+              Id_user:"error",
+              error: true,
+              status: 'cajas no anotadas'
+          }
+          )
+        }
+
+        
+      });
+    }
+
+  });       
+});

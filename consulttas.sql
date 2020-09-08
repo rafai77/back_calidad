@@ -272,3 +272,48 @@ SELECT t.*,(num_color3+num_color4+num_color5) as Total FROM totales11 t
 
 SELECT t.Brix2,t.Brix2/(num_color3+num_color4+num_color5) as Total FROM totales11 t
 SELECT  t.fecha,COUNT(r.id_user) as cantidad from registros r, totales12 t where t.fecha='2020-09-08 09:03:02.233612' and r.fecha='2020-09-08 09:03:02.233612'
+
+
+
+CREATE TABLE registros16
+(
+    id_reg INT NOT NULL  AUTO_INCREMENT , -- primary key column
+    id_user INT NOT NULL ,
+    id_inve INT NOT NULL  ,
+    num_tunel INT NOT NULL,
+    racimo1 INT NOT NULL,
+    racimo2 INT NOT NULL,
+    racimo3 INT NOT NULL,
+    racimo4 INT NOT NULL,
+    racimo5 INT NOT NULL,
+    racimo6 INT NOT NULL,
+    tamchico INT NOT NULL,
+    lado varchar(2)not null,
+    peso  DECIMAL(5,2)  NULL,
+    pudricion INT NOT NULL,
+    flojo INT NOT NULL,
+    mecanico INT NOT NULL,
+    blossom INT NOT NULL,
+    cierre INT NOT NULL,
+    deforme INT NOT NULL,
+    cicatriz INT NOT NULL,
+    insecto_daño INT NOT NULL,
+    insecto_presencia INT NOT NULL,
+    craking INT NOT NULL,
+    corte INT NOT NULL,
+    golpe INT NOT NULL,
+    exverde INT NOT NULL,
+    color_disparejo INT NOT NULL,
+    arrudago INT NOT NULL,
+    blotchy INT NOT NULL,
+    suelto INT NOT NULL,
+    daño_virus int not null,
+    fecha DATE not null,
+    tiempo TIME,
+    UNIQUE (fecha,id_inve,num_tunel),
+    PRIMARY KEY(id_reg),
+    FOREIGN KEY (id_user) REFERENCES usuarios(id_user),
+    FOREIGN KEY (id_inve) REFERENCES invernaderos(id_inver)
+);
+INSERT INTO registros16(id_user,id_inve,num_tunel,racimo1,racimo2,racimo3,racimo4,racimo5,racimo6,tamchico,peso,pudricion,flojo,mecanico,blossom,cierre,deforme,cicatriz,insecto_daño,insecto_presencia,,dano_virus,craking,corte,golpe,exverde,arrugado,blotchy,suelto,color_disparejo,fecha,lado,tiempo) 
+VALUES(5, 16, 1, 25, 25, 36, 31, 21, 39, 6, 3, 2, 2, 2, 0, 0, 0, 2, 2, 3, 0, 2, 1, 0, 2, 3, 2, 0, 2, '2020-09-08 00:00:00.000', 'N', ' 00:00:00.000')
