@@ -317,3 +317,43 @@ CREATE TABLE registros16
 );
 INSERT INTO registros16(id_user,id_inve,num_tunel,racimo1,racimo2,racimo3,racimo4,racimo5,racimo6,tamchico,peso,pudricion,flojo,mecanico,blossom,cierre,deforme,cicatriz,insecto_daño,insecto_presencia,,dano_virus,craking,corte,golpe,exverde,arrugado,blotchy,suelto,color_disparejo,fecha,lado,tiempo) 
 VALUES(5, 16, 1, 25, 25, 36, 31, 21, 39, 6, 3, 2, 2, 2, 0, 0, 0, 2, 2, 3, 0, 2, 1, 0, 2, 3, 2, 0, 2, '2020-09-08 00:00:00.000', 'N', ' 00:00:00.000')
+
+
+CREATE TABLE totales16
+(
+    i_total int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    fecha DATE not null,
+    racimo1 INT NOT NULL,
+    racimo2 INT NOT NULL,
+    racimo3 INT NOT NULL,
+    racimo4 INT NOT NULL,
+    racimo5 INT NOT NULL,
+    racimo6 INT NOT NULL,
+    tamchico INT NOT NULL,
+    peso  DECIMAL(5,2)  NULL,
+    pudricion INT NOT NULL,
+    flojo INT NOT NULL,
+    mecanico INT NOT NULL,
+    blossom INT NOT NULL,
+    cierre INT NOT NULL,
+    deforme INT NOT NULL,
+    cicatriz INT NOT NULL,
+    insecto_daño INT NOT NULL,
+    insecto_presencia INT NOT NULL,
+    craking INT NOT NULL,
+    corte INT NOT NULL,
+    golpe INT NOT NULL,
+    exverde INT NOT NULL,
+    color_disparejo INT NOT NULL,
+    arrudago INT NOT NULL,
+    blotchy INT NOT NULL,
+    suelto INT NOT NULL,
+    daño_virus int not null,
+    UNIQUE (fecha)
+
+)
+
+
+
+
+insert into totales16(fecha,racimo1,racimo2,racimo3,racimo4,racimo5,racimo6,tamchico,peso,pudricion,flojo,mecanico,blossom,cierre,deforme,cicatriz,insecto_daño,insecto_presencia,daño_virus,craking,corte,golpe,exverde,arrugado,blotchy,suelto,color_disparejo) SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(racimo1),sum(racimo2),sum(racimo3),sum(racimo4),sum(racimo5),sum(racimo6),sum(tamchico),sum(peso),sum(pudricion),sum(flojo),sum(mecanico),sum(blossom),sum(cierre),sum(deforme),sum(cicatriz),sum(insecto_daño),sum(insecto_presencia),sum(daño_virus),sum(craking),sum(corte),sum(golpe),sum(exverde),sum(arrugado),sum(blotchy),sum(suelto),sum(color_disparejo) from registros16 where fecha BETWEEN '2020-09-08' and '2020-09-08'
