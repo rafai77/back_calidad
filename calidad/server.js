@@ -847,7 +847,7 @@ app.post('/addC12', verificaTk, (req, res)=> {
     f2+=" 23:59:00";    
     console.log(f1,f2);
       //console.log(data);
-      mysqlConnection.query('INSERT INTO registros12(id_user,id_inve,num_tunel,num_color3,num_color4,num_color5,tamchico,lado,peso,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz,fecha,tiempo) VALUES(?)', [regi], function(error, results, fields) {
+      mysqlConnection.query('INSERT INTO registros12(id_user,id_inve,num_tunel,num_color3,num_color4,num_color5,tamchico,peso,lado,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz,fecha,tiempo) VALUES(?)', [regi], function(error, results, fields) {
         if(!error)
         {
           mysqlConnection.query('select * from totales12 where fecha BETWEEN ? and ?',[f1,f2], function(error, results, fields) {
@@ -1061,9 +1061,9 @@ app.post('/brix/', verificaTk, (req, res)=> {
     }
     else
     {
-      console.log(req.body.fecha.toString())
-      //SELECT  t.fecha,COUNT(r.id_user) as cantidad from registros r,totales11 t where t.fecha='2020-09-03'      
-      mysqlConnection.query("SELECT  t.fecha,COUNT(r.id_user) as cantidad from registros r,totales11 t where t.fecha=? and r.fecha=?",[req.body.fecha.toString(),req.body.fecha.toString()], function(error, results, fields) {
+      console.log(req.body)
+     console.log(`SELECT  t.fecha,COUNT(r.id_users) as cantidad from registros r, ${req.body.tabla} t where t.fecha=? and r.fecha=?`)     
+      mysqlConnection.query(`SELECT  t.fecha,COUNT(r.id_user) as cantidad from registros r, ${req.body.tabla} t where t.fecha=? and r.fecha=?`,[req.body.fecha.toString().substr(10),req.body.fecha.toString()], function(error, results, fields) {
         if(!error)
         {
           res.json(
@@ -1174,8 +1174,6 @@ app.delete('/borrar12/:id', verificaTk, (req, res)=> {
       });
   });       
 });
-
-
 
 app.post('/tablatotales/', verificaTk, (req, res)=>
 {

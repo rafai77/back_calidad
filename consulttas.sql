@@ -271,3 +271,4 @@ SELECT t.*,(num_color3+num_color4+num_color5) as Total FROM totales11 t
 
 
 SELECT t.Brix2,t.Brix2/(num_color3+num_color4+num_color5) as Total FROM totales11 t
+SELECT  t.fecha,COUNT(r.id_user) as cantidad from registros r, totales12 t where t.fecha='2020-09-08 09:03:02.233612' and r.fecha='2020-09-08 09:03:02.233612'
