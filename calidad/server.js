@@ -1442,23 +1442,23 @@ app.post('/addC15', verificaTk, (req, res)=> {
     f2+=" 23:59:00";    
     console.log(f1,f2);
       //console.log(data);
-      mysqlConnection.query('INSERT INTO registros(id_user,id_inve,num_tunel,num_color3,num_color4,num_color5,tamchico,lado,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz,fecha,tiempo) VALUES(?)', [regi], function(error, results, fields) {
+      mysqlConnection.query('INSERT INTO registros15(id_user,id_inve,num_tunel,num_color3,num_color4,num_color5,tamchico,lado,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz,fecha,tiempo) VALUES(?)', [regi], function(error, results, fields) {
         if(!error)
         {
           //actualizar el total 
-          mysqlConnection.query('select * from totales11 where fecha BETWEEN ? and ?',[f1,f2], function(error, results, fields) {
+          mysqlConnection.query('select * from totales15 where fecha BETWEEN ? and ?',[f1,f2], function(error, results, fields) {
           
           if(results.length==0)
           {
             // se crea el registro 
-            mysqlConnection.query("insert into totales16(fecha,num_color3,num_color4,num_color5,tamchico,Brix,Brix2,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz ) SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(num_color3),sum(num_color4),sum(num_color5),sum(tamchico),sum(0),sum(0),sum(pudricion),sum(tallo),sum(flojo),sum(mecanico),sum(blossom),sum(reventado),sum(cierre),sum(deforme),sum(cicatriz),sum(insecto),sum(color_disparejo),sum(caliz),sum(viruz) from registros16 where fecha BETWEEN ? and ?",[f1,f2], function(error, results, fields) {   
+            mysqlConnection.query("insert into totales15(fecha,num_color3,num_color4,num_color5,tamchico,Brix,Brix2,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz ) SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(num_color3),sum(num_color4),sum(num_color5),sum(tamchico),sum(0),sum(0),sum(pudricion),sum(tallo),sum(flojo),sum(mecanico),sum(blossom),sum(reventado),sum(cierre),sum(deforme),sum(cicatriz),sum(insecto),sum(color_disparejo),sum(caliz),sum(viruz) from registros15 where fecha BETWEEN ? and ?",[f1,f2], function(error, results, fields) {   
               console.log(results);
             });
             console.log("no existe el registro del total para ese dia");
           }
           else
           {
-            mysqlConnection.query("SELECT sum(num_color3)num_color3,sum(num_color4)as num_color4,sum(num_color5)num_color5,sum(tamchico)as tamchico,sum(0)as Brix,sum(0)as Brix2,sum(pudricion)as pudricion,sum(tallo)as tallo,sum(flojo) as flojo,sum(mecanico)as mecanico,sum(blossom)as blossom,sum(reventado)as reventado,sum(cierre)as cierre,sum(deforme)as deforme,sum(cicatriz)as cicatriz,sum(insecto)as insecto,sum(color_disparejo)as color_disparejo,sum(caliz)as caliz,sum(viruz)as viruz  from registros16 where fecha BETWEEN ? and ?",[f1,f2], function(error, row, fields) {   
+            mysqlConnection.query("SELECT sum(num_color3)num_color3,sum(num_color4)as num_color4,sum(num_color5)num_color5,sum(tamchico)as tamchico,sum(0)as Brix,sum(0)as Brix2,sum(pudricion)as pudricion,sum(tallo)as tallo,sum(flojo) as flojo,sum(mecanico)as mecanico,sum(blossom)as blossom,sum(reventado)as reventado,sum(cierre)as cierre,sum(deforme)as deforme,sum(cicatriz)as cicatriz,sum(insecto)as insecto,sum(color_disparejo)as color_disparejo,sum(caliz)as caliz,sum(viruz)as viruz  from registros15 where fecha BETWEEN ? and ?",[f1,f2], function(error, row, fields) {   
               //actualiza
               console.log(row)
               var regi="";
@@ -1469,7 +1469,7 @@ app.post('/addC15', verificaTk, (req, res)=> {
               }
               regi=regi.substr(0,regi.length-1);
               console.log(regi);
-              regi="UPDATE totales16 set "+regi+" where fecha BETWEEN '"+f1+"' and '"+f2+"'"
+              regi="UPDATE totales15 set "+regi+" where fecha BETWEEN '"+f1+"' and '"+f2+"'"
               console.log(regi);
               mysqlConnection.query(regi, function(error, results, fields) {
               console.log(results);
@@ -1625,7 +1625,7 @@ app.put('/actualizar15/', verificaTk, (req, res)=> {
 });
 
 
-
+//16
 
 app.post('/infocolum16', verificaTk, (req, res)=> {
   jwt.verify(req.token,secret,(err,data)=>
