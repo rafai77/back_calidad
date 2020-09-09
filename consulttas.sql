@@ -357,3 +357,8 @@ CREATE TABLE totales16
 
 
 insert into totales16(fecha,racimo1,racimo2,racimo3,racimo4,racimo5,racimo6,tamchico,peso,pudricion,flojo,mecanico,blossom,cierre,deforme,cicatriz,insecto_daño,insecto_presencia,daño_virus,craking,corte,golpe,exverde,arrugado,blotchy,suelto,color_disparejo) SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(racimo1),sum(racimo2),sum(racimo3),sum(racimo4),sum(racimo5),sum(racimo6),sum(tamchico),sum(peso),sum(pudricion),sum(flojo),sum(mecanico),sum(blossom),sum(cierre),sum(deforme),sum(cicatriz),sum(insecto_daño),sum(insecto_presencia),sum(daño_virus),sum(craking),sum(corte),sum(golpe),sum(exverde),sum(arrugado),sum(blotchy),sum(suelto),sum(color_disparejo) from registros16 where fecha BETWEEN '2020-09-08' and '2020-09-08'
+SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(racimo1),sum(racimo2),sum(racimo3),sum(racimo4),sum(racimo5),sum(racimo6),sum(tamchico),sum(peso),sum(pudricion),sum(flojo),sum(mecanico),sum(blossom),sum(cierre),sum(deforme),sum(cicatriz),sum(insecto_daño),sum(insecto_presencia),sum(daño_virus),sum(craking),sum(corte),sum(golpe),sum(exverde),sum(arrugado),sum(blotchy),sum(suelto),sum(color_disparejo) from registros16 where fecha BETWEEN '2020-09-08' and '2020-09-08'
+
+
+
+UPDATE totales16 set fecha=2020-09-08,racimo1=33,racimo2=13,racimo3=44,racimo4=45,racimo5=36,racimo6=35,tamchico=102,peso=26,pudricion=8,flojo=5,mecanico=6,blossom=5,cierre=6,deforme=4,cicatriz=9,insecto_daño=8,daño_virus=1,craking=3,corte=2,golpe=4,exverde=3,arrugado=2,blotchy=2,suelto=1,color_disparejo=2 where fecha BETWEEN '2020-09-08 00:00:00' and '2020-09-08 23:59:00'

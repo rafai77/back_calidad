@@ -1223,6 +1223,71 @@ app.post('/tablatotales/', verificaTk, (req, res)=>
 );
 
 
+
+
+app.post('/registros16', verificaTk, (req, res)=> {
+  jwt.verify(req.token,secret,(err,data)=>
+  {
+    if(err)
+    {
+     
+      res.sendStatus(403);
+    }
+    else
+    {
+     
+      mysqlConnection.query('select * from invernaderos where Nombre=?',[req.body.name], function(error, results, fields) {
+        
+        if (results.length>0) // quiere decir que se econtro un usuario
+        {
+          
+          if(!results){
+            res.json(results);          
+        } else{
+          let idi=results[0].id_inver;
+          console.log(idi);
+          var mydatei =req.body.fecha.toString().split(" ")
+          var mydatef =req.body.fecha.toString().split(" ")
+          mydatei=mydatei[0];
+          mydatef=mydatef[0];
+          mydatei+=" 00:00:00";
+          mydatef+=" 23:59:59"
+          console.log(mydatei);
+          console.log(mydatef);
+          mysqlConnection.query("select * from registros16 where id_inve=? and fecha BETWEEN ? AND ?",[idi,mydatei,mydatef], function(error, results, fields) {
+            if (results.length>0) // quiere decir que se econtro un usuario
+        {
+          console.log(results);
+          if(!results){
+            res.json(results);          
+        } else
+        {
+          res.json(results);          
+        }
+      }
+      else{
+        res.json(
+          {
+            'Status':results.length
+          }
+          
+
+        );
+      }
+
+          });
+        }
+        }
+      });
+      
+    }
+
+  });       
+});
+
+
+
+
 app.post('/addC16', verificaTk, (req, res)=> {
   jwt.verify(req.token,secret,(err,data)=>
   {
