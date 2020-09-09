@@ -1224,6 +1224,80 @@ app.post('/tablatotales/', verificaTk, (req, res)=>
 
 
 
+app.put('/actualizar16/', verificaTk, (req, res)=> {
+  jwt.verify(req.token,secret,(err,data)=>
+  {
+    if(err)
+    {
+      res.json(
+        {
+          log: false,
+          User: null,
+          error: true,
+          status: 'no se puede actualizar una caja asi iniciar sesion por favor'
+        }
+      )
+    }
+    else
+    {
+      data=req.body.REG;
+      data=JSON.parse(data);
+      console.log(data);
+      var regi="";
+      var i=0;
+      for (var prop in data) {
+        
+        if(prop=='lado')
+        {
+          regi+=prop+"='"+data[prop]+"',";
+        }
+        else{
+          if(prop=='arrudago')
+            regi+="arrugado="+data[prop]+",";
+            else
+              if(prop=='fecha')
+                regi+=prop+"='"+data[prop]+"',";
+              else
+                regi+=prop+"="+data[prop]+",";
+        }
+      }
+    console.log(regi[regi.length-1]);
+    regi=regi.substr(0,regi.length-1);
+    console.log(regi);
+   // print(asd);
+    regi="UPDATE registros16 set "+regi+" where id_reg="+req.body.id.toString();
+      //console.log(data);
+      mysqlConnection.query(regi, function(error, results, fields) {
+        if(!error)
+        {
+          res.json(
+            {
+              Id_user: `${idu}`,
+              error: false,
+              status: 'tunel actualizado'
+    
+            }
+          )
+        }
+        else
+        {
+          console.log(error)
+          res.json({
+              Cajas: "error",
+              Id_user:"error",
+              error: true,
+              status: 'tunel no actualizado'
+          }
+          )
+        }
+
+        
+      });
+    }
+
+  });       
+});
+
 
 app.post('/registros16', verificaTk, (req, res)=> {
   jwt.verify(req.token,secret,(err,data)=>
@@ -1286,7 +1360,48 @@ app.post('/registros16', verificaTk, (req, res)=> {
 });
 
 
-
+app.delete('/borrar16/:id', verificaTk, (req, res)=> {
+  jwt.verify(req.token,secret,(err,data)=>
+  {
+    if(err)
+    {
+      res.json(
+        {
+          log: false,
+          User: null,
+          error: true,
+          status: 'no se puede borrar un tunel asi iniciar sesion por favor'
+        }
+      )
+    }
+    console.log(req.params.id);
+    var id=req.params.id;
+      //console.log(data);
+      mysqlConnection.query("Delete From registros16 where id_reg=?", [id],function(error, results, fields) {
+        if(!error)
+        {
+          res.json(
+            {
+              Id_user: `${idu}`,
+              error: false,
+              status: 'tunel actualizado'
+            }
+          )
+        }
+        else
+        {
+          console.log(error)
+          res.json({
+              Cajas: "error",
+              Id_user:"error",
+              error: true,
+              status: 'tunel no actualizado'
+          }
+          )
+        }
+      });
+  });       
+});
 
 app.post('/addC16', verificaTk, (req, res)=> {
   jwt.verify(req.token,secret,(err,data)=>
