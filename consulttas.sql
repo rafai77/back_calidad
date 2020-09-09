@@ -32,6 +32,11 @@ INSERT INTO invernaderos VALUES
 
 INSERT INTO invernaderos VALUES
 ( 
+ 15, "Invernadero-15", "tomate"
+);
+
+INSERT INTO invernaderos VALUES
+( 
  2, "Invernadero-2", "Pimiento"
 );
 
@@ -362,3 +367,5 @@ SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(racimo1),sum(racimo2),sum(raci
 
 
 UPDATE totales16 set fecha=2020-09-08,racimo1=33,racimo2=13,racimo3=44,racimo4=45,racimo5=36,racimo6=35,tamchico=102,peso=26,pudricion=8,flojo=5,mecanico=6,blossom=5,cierre=6,deforme=4,cicatriz=9,insecto_daño=8,daño_virus=1,craking=3,corte=2,golpe=4,exverde=3,arrugado=2,blotchy=2,suelto=1,color_disparejo=2 where fecha BETWEEN '2020-09-08 00:00:00' and '2020-09-08 23:59:00'
+
+select R.id_reg,U.user,I.Nombre,R.num_tunel,R.racimo1,R.racimo2,R.racimo3,R.racimo4,R.racimo5,R.racimo6,R.tamchico,R.peso,R.pudricion,R.flojo,R.mecanico,R.blossom,R.cierre,R.deforme,R.cicatriz,R.insecto_daño,R.insecto_presencia,R.daño_virus,R.craking,R.corte,R.golpe,R.exverde,R.arrugado,R.blotchy,R.suelto,R.color_disparejo,R.fecha,R.lado,R.tiempo from registros16 R,usuarios U,invernaderos I where R.id_user=U.id_user and R.id_inve=I.id_inver and R.id_inve=16 and fecha BETWEEN '2020-09-08 00:00:00' and '2020-09-08 23:59:00'

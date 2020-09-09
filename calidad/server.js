@@ -1192,8 +1192,13 @@ app.post('/tablatotales/', verificaTk, (req, res)=>
     }
     else
     {
-      
-      let sql="SELECT t.*,(num_color3+num_color4+num_color5) as Total FROM "+req.body.tabla+" t where fecha=?"
+      console.log(req.body)
+      let sql=""
+      if(req.body.tabla=="totales16" || req.body.tabla=="totales13" || req.body.tabla=="totales14")
+      sql="SELECT t.*,(racimo1+racimo2+racimo3+racimo4+racimo5+racimo6) as Total FROM "+req.body.tabla+" t where fecha=?"
+      else
+      sql="SELECT t.*,(num_color3+num_color4+num_color5) as Total FROM "+req.body.tabla+" t where fecha=?"
+
       console.log(req.body,sql)
       mysqlConnection.query(sql,[req.body.fecha],function(error, results, fields) {
         console.log(error)
@@ -1222,6 +1227,515 @@ app.post('/tablatotales/', verificaTk, (req, res)=>
 }
 );
 
+
+
+
+
+//registros para el 15 
+app.post('/registros15', verificaTk, (req, res)=> {
+  jwt.verify(req.token,secret,(err,data)=>
+  {
+    if(err)
+    {
+     
+      res.sendStatus(403);
+    }
+    else
+    {
+     
+      mysqlConnection.query('select * from invernaderos where Nombre=?',[req.body.name], function(error, results, fields) {
+        
+        if (results.length>0) // quiere decir que se econtro un usuario
+        {
+          
+          if(!results){
+            res.json(results);          
+        } else{
+          let idi=results[0].id_inver;
+          console.log(idi);
+          var mydatei =req.body.fecha.toString().split(" ")
+          var mydatef =req.body.fecha.toString().split(" ")
+          mydatei=mydatei[0];
+          mydatef=mydatef[0];
+          mydatei+=" 00:00:00";
+          mydatef+=" 23:59:59"
+          console.log(mydatei);
+          console.log(mydatef);
+          mysqlConnection.query("select * from registros15 where id_inve=? and fecha BETWEEN ? AND ?",[idi,mydatei,mydatef], function(error, results, fields) {
+            if (results.length>0) // quiere decir que se econtro un usuario
+        {
+          console.log(results);
+          if(!results){
+            res.json(results);          
+        } else
+        {
+          res.json(results);          
+        }
+      }
+      else{
+        res.json(
+          {
+            'Status':results.length
+          }
+          
+
+        );
+      }
+
+          });
+        }
+        }
+      });
+      
+    }
+
+  });       
+});
+
+app.post('/datos15', verificaTk, (req, res)=> {
+  jwt.verify(req.token,secret,(err,data)=>
+  {
+    if(err)
+    {
+     
+      res.sendStatus(403);
+    }
+    else
+    {
+     
+      mysqlConnection.query('select * from invernaderos where Nombre=?',[req.body.name], function(error, results, fields) {
+        
+        if (results.length>0) // quiere decir que se econtro un usuario
+        {
+          
+          if(!results){
+            res.json(results);          
+        } else{
+          let idi=results[0].id_inver;
+          console.log(idi);
+          var mydatei =req.body.fecha.toString().split(" ")
+          var mydatef =req.body.fecha.toString().split(" ")
+          mydatei=mydatei[0];
+          mydatef=mydatef[0];
+          mydatei+=" 00:00:00";
+          mydatef+=" 23:59:59"
+          console.log(mydatei);
+          console.log(mydatef);
+          mysqlConnection.query("select R.id_reg,U.user,I.Nombre,R.num_tunel,R.num_color3,R.num_color4,R.num_color5,R.tamchico,R.lado,R.pudricion,R.tallo,R.flojo,R.mecanico,R.blossom,R.reventado,R.cierre,R.deforme,R.cicatriz,R.insecto,R.color_disparejo,R.caliz,R.viruz,DATE_FORMAT(R.fecha ,'%Y-%m-%d') as '\tFecha',R.tiempo from registros15 R,usuarios U,invernaderos I where R.id_user=U.id_user and R.id_inve=I.id_inver and R.id_inve=? and fecha BETWEEN ? AND ?",[idi,mydatei,mydatef], function(error, results, fields) {
+            if (results.length>0) // quiere decir que se econtro un usuario
+        {
+          console.log(results);
+          if(!results){
+            res.json(results);          
+        } else
+        {
+          res.json(results);          
+        }
+      }
+      else{
+        res.json(
+          {
+            'Status':results.length
+          }
+          
+
+        );
+      }
+
+          });
+        }
+        }
+      });
+      
+    }
+
+  });       
+});
+
+app.post('/infocolum15', verificaTk, (req, res)=> {
+  jwt.verify(req.token,secret,(err,data)=>
+    {
+      if(err)
+      {
+       
+        res.sendStatus(403);
+      }
+      else
+      {
+        var c=req.body.c;
+        var f1=req.body.f1+" 00:00:00";
+        var f2=req.body.f2+" 23:59:59";
+        console.log(f1,f2);
+        var resul=[]
+        var sql="";
+        var campos=""
+        var aux;
+        for(var i in c)
+        {
+           campos+=c[i]+","
+        }
+        sql="select "+campos+"DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha from totales15 where fecha BETWEEN '"+f1+"' and '"+f2+"' ";
+       //console.log(sql);
+        mysqlConnection.query(sql, function(error, results, fields) {
+         // console.log(results)
+          for (var i in results)
+          {
+            for(var j in results[i])
+            {
+              if(j!='fecha')
+              {
+                resul.push(
+                  {
+                    "fecha":results[i]["fecha"],
+                    "campo":j,
+                    "valor":results[i][j]
+                  }
+                );
+              }
+            }
+          }
+          console.log(resul);
+         res.json(resul);
+         });
+  };
+  });
+});
+
+app.post('/addC15', verificaTk, (req, res)=> {
+  jwt.verify(req.token,secret,(err,data)=>
+  {
+    if(err)
+    {
+      res.json(
+        {
+          log: false,
+          User: null,
+          error: true,
+          status: 'no se puede registrar una surco asi iniciar sesion por favor'
+        }
+      )
+    }
+    else
+    {
+      data=req.body.REG;
+      data=JSON.parse(data);
+     
+      var regi=[];
+      var i=0;
+      var f="";
+      for (var prop in data)
+      {
+        regi[i]=data[prop];
+        if(prop=='fecha')
+        f=data[prop];
+        i++;
+      }
+    console.log(f);
+    var f1=f;
+    f1=f.split(" ");
+    f=f.substr(10);
+    f1=f1[0];
+    console.log(f);
+    regi[i]=f;
+    var f2=f1
+    f1+=" 00:00:00";
+    f2+=" 23:59:00";    
+    console.log(f1,f2);
+      //console.log(data);
+      mysqlConnection.query('INSERT INTO registros(id_user,id_inve,num_tunel,num_color3,num_color4,num_color5,tamchico,lado,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz,fecha,tiempo) VALUES(?)', [regi], function(error, results, fields) {
+        if(!error)
+        {
+          //actualizar el total 
+          mysqlConnection.query('select * from totales11 where fecha BETWEEN ? and ?',[f1,f2], function(error, results, fields) {
+          
+          if(results.length==0)
+          {
+            // se crea el registro 
+            mysqlConnection.query("insert into totales16(fecha,num_color3,num_color4,num_color5,tamchico,Brix,Brix2,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz ) SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(num_color3),sum(num_color4),sum(num_color5),sum(tamchico),sum(0),sum(0),sum(pudricion),sum(tallo),sum(flojo),sum(mecanico),sum(blossom),sum(reventado),sum(cierre),sum(deforme),sum(cicatriz),sum(insecto),sum(color_disparejo),sum(caliz),sum(viruz) from registros16 where fecha BETWEEN ? and ?",[f1,f2], function(error, results, fields) {   
+              console.log(results);
+            });
+            console.log("no existe el registro del total para ese dia");
+          }
+          else
+          {
+            mysqlConnection.query("SELECT sum(num_color3)num_color3,sum(num_color4)as num_color4,sum(num_color5)num_color5,sum(tamchico)as tamchico,sum(0)as Brix,sum(0)as Brix2,sum(pudricion)as pudricion,sum(tallo)as tallo,sum(flojo) as flojo,sum(mecanico)as mecanico,sum(blossom)as blossom,sum(reventado)as reventado,sum(cierre)as cierre,sum(deforme)as deforme,sum(cicatriz)as cicatriz,sum(insecto)as insecto,sum(color_disparejo)as color_disparejo,sum(caliz)as caliz,sum(viruz)as viruz  from registros16 where fecha BETWEEN ? and ?",[f1,f2], function(error, row, fields) {   
+              //actualiza
+              console.log(row)
+              var regi="";
+              var i=0;
+              for (var prop in row[0])
+              {
+                regi+=prop+"="+row[0][prop]+",";
+              }
+              regi=regi.substr(0,regi.length-1);
+              console.log(regi);
+              regi="UPDATE totales16 set "+regi+" where fecha BETWEEN '"+f1+"' and '"+f2+"'"
+              console.log(regi);
+              mysqlConnection.query(regi, function(error, results, fields) {
+              console.log(results);
+
+              });
+
+              console.log(results);
+            });
+            console.log("solo se debe actualizar ");
+          }
+          });
+          res.json(
+            {
+              Id_user: `${idu}`,
+              error: false,
+              status: 'surco agregado'
+    
+            }
+          )
+        }
+        else
+        {
+          console.log(error)
+          res.json({
+              Cajas: "error",
+              Id_user:"error",
+              error: true,
+              status: 'cajas no anotadas'
+          }
+          )
+        }
+
+        
+      });
+    }
+
+  });       
+});
+
+app.delete('/borrar15/:id', verificaTk, (req, res)=> {
+  jwt.verify(req.token,secret,(err,data)=>
+  {
+    if(err)
+    {
+      res.json(
+        {
+          log: false,
+          User: null,
+          error: true,
+          status: 'no se puede borrar un tunel asi iniciar sesion por favor'
+        }
+      )
+    }
+    console.log(req.params.id);
+    var id=req.params.id;
+      //console.log(data);
+      mysqlConnection.query("Delete From registros15 where id_reg=?", [id],function(error, results, fields) {
+        if(!error)
+        {
+          res.json(
+            {
+              Id_user: `${idu}`,
+              error: false,
+              status: 'tunel actualizado'
+            }
+          )
+        }
+        else
+        {
+          console.log(error)
+          res.json({
+              Cajas: "error",
+              Id_user:"error",
+              error: true,
+              status: 'tunel no actualizado'
+          }
+          )
+        }
+      });
+  });       
+});
+
+app.put('/actualizar15/', verificaTk, (req, res)=> {
+  jwt.verify(req.token,secret,(err,data)=>
+  {
+    if(err)
+    {
+      res.json(
+        {
+          log: false,
+          User: null,
+          error: true,
+          status: 'no se puede actualizar una caja asi iniciar sesion por favor'
+        }
+      )
+    }
+    else
+    {
+      data=req.body.REG;
+      data=JSON.parse(data);
+      console.log(data);
+      var regi="";
+      var i=0;
+      for (var prop in data) {
+        if(prop=='lado')
+        {
+          regi+=prop+"='"+data[prop]+"',";
+        }
+        else{
+          if(prop=='fecha')
+          regi+=prop+"='"+data[prop]+"',";
+          else
+          regi+=prop+"="+data[prop]+",";
+        }
+        
+        
+    }
+    console.log(regi[regi.length-1]);
+    regi=regi.substr(0,regi.length-1);
+    console.log(regi);
+   // print(asd);
+    regi="UPDATE registros15 set "+regi+" where id_reg="+req.body.id.toString();
+      //console.log(data);
+      mysqlConnection.query(regi, function(error, results, fields) {
+        if(!error)
+        {
+          res.json(
+            {
+              Id_user: `${idu}`,
+              error: false,
+              status: 'tunel actualizado'
+    
+            }
+          )
+        }
+        else
+        {
+          console.log(error)
+          res.json({
+              Cajas: "error",
+              Id_user:"error",
+              error: true,
+              status: 'tunel no actualizado'
+          }
+          )
+        }
+
+        
+      });
+    }
+
+  });       
+});
+
+
+
+
+app.post('/infocolum16', verificaTk, (req, res)=> {
+  jwt.verify(req.token,secret,(err,data)=>
+    {
+      if(err)
+      {
+       
+        res.sendStatus(403);
+      }
+      else
+      {
+        var c=req.body.c;
+        var f1=req.body.f1+" 00:00:00";
+        var f2=req.body.f2+" 23:59:59";
+        console.log(f1,f2,c);
+        var resul=[]
+        var sql="";
+        var campos=""
+        var aux;
+        for(var i in c)
+        {
+           campos+=c[i]+","
+        }
+        sql="select "+campos+"DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha from totales16 where fecha BETWEEN '"+f1+"' and '"+f2+"' ";
+       console.log(sql);
+        mysqlConnection.query(sql, function(error, results, fields) {
+         // console.log(results)
+          for (var i in results)
+          {
+            for(var j in results[i])
+            {
+              if(j!='fecha')
+              {
+                resul.push(
+                  {
+                    "fecha":results[i]["fecha"],
+                    "campo":j,
+                    "valor":results[i][j]
+                  }
+                );
+              }
+            }
+          }
+          console.log(resul);
+         res.json(resul);
+         });
+  };
+  });
+});
+
+
+app.post('/datos16', verificaTk, (req, res)=> {
+  jwt.verify(req.token,secret,(err,data)=>
+  {
+    if(err)
+    {
+     
+      res.sendStatus(403);
+    }
+    else
+    {
+     
+      mysqlConnection.query('select * from invernaderos where Nombre=?',[req.body.name], function(error, results, fields) {
+        
+        if (results.length>0) // quiere decir que se econtro un usuario
+        {
+          
+          if(!results){
+            res.json(results);          
+        } else{
+          let idi=results[0].id_inver;
+          console.log(idi);
+          var mydatei =req.body.fecha.toString().split(" ")
+          var mydatef =req.body.fecha.toString().split(" ")
+          mydatei=mydatei[0];
+          mydatef=mydatef[0];
+          mydatei+=" 00:00:00";
+          mydatef+=" 23:59:59"
+          console.log(mydatei);
+          console.log(mydatef);
+          mysqlConnection.query("select R.id_reg,U.user,I.Nombre,R.num_tunel,R.racimo1,R.racimo2,R.racimo3,R.racimo4,R.racimo5,R.racimo6,R.tamchico,R.peso,R.pudricion,R.flojo,R.mecanico,R.blossom,R.cierre,R.deforme,R.cicatriz,R.insecto_daño,R.insecto_presencia,R.daño_virus,R.craking,R.corte,R.golpe,R.exverde,R.arrugado,R.blotchy,R.suelto,R.color_disparejo,R.fecha,R.lado,R.tiempo from registros16 R,usuarios U,invernaderos I where R.id_user=U.id_user and R.id_inve=I.id_inver and R.id_inve=? and fecha BETWEEN ? AND ?",[idi,mydatei,mydatef], function(error, results, fields) {
+            if (results.length>0) // quiere decir que se econtro un usuario
+        {
+          console.log(results);
+          if(!results){
+            res.json(results);          
+        } else
+        {
+          res.json(results);          
+        }
+      }
+      else{
+        res.json(
+          {
+            'Status':results.length
+          }
+          
+
+        );
+      }
+
+          });
+        }
+        }
+      });
+      
+    }
+
+  });       
+});
 
 
 app.put('/actualizar16/', verificaTk, (req, res)=> {
