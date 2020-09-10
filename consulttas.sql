@@ -47,6 +47,17 @@ INSERT INTO invernaderos VALUES
 
 
 
+INSERT INTO invernaderos VALUES
+( 
+ 13, "Invernadero-13", "tomate"
+);
+
+INSERT INTO invernaderos VALUES
+( 
+ 14, "Invernadero-14", "tomate"
+);
+
+
 
 use calidad;
 insert into totales11(fecha,num_color3,num_color4,num_color5,tamchico,Brix,Brix2,pudricion,
@@ -65,7 +76,7 @@ SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha sum(num_color3)num_color3,sum(num_
 
 
 SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(num_color3)num_color3,sum(num_color4)as num_color4,sum(num_color5)num_color5,sum(tamchico)as tamchico,sum(Brix)as Brix,sum(Brix2)as Brix2,sum(pudricion)as pudricion,sum(tallo)as tallo,sum(flojo) as flojo,sum(mecanico)as mecanico,sum(blossom)as blossom,sum(reventado)as reventado,sum(cierre)as cierre,sum(deforme)as deforme,sum(cicatriz)as cicatriz,sum(insecto)as insecto,sum(color_disparejo)as color_disparejo,sum(caliz)as caliz,sum(viruz)asviruz  from registros where fecha BETWEEN "2020-08-12 00:00:00" and "2020-08-12 23:59:00"
-create TABLE totales11
+create TABLE totales15
 (
     i_total int NOT NULL PRIMARY KEY AUTO_INCREMENT,
     fecha date not null,
@@ -120,7 +131,7 @@ select R.id_reg,U.user,I.Nombre,R.num_tunel,R.num_color3,R.num_color4,R.num_colo
 R.tamchico,R.Brix,R.Brix2,R.pudricion,R.tallo,R.flojo,R.mecanico,R.blossom,R.reventado,
 R.cierre,R.deforme,R.cicatriz,R.insecto,R.color_disparejo,R.caliz,R.viruz,R.fecha,R.tiempo
 from registros R,usuarios U,invernaderos I where R.id_user=U.id_user and R.id_inve=I.id_inver  and R.id_inve=11
-CREATE TABLE registros
+CREATE TABLE registros15
 (
     id_reg INT NOT NULL  AUTO_INCREMENT , -- primary key column
     id_user INT NOT NULL ,
@@ -369,3 +380,132 @@ SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(racimo1),sum(racimo2),sum(raci
 UPDATE totales16 set fecha=2020-09-08,racimo1=33,racimo2=13,racimo3=44,racimo4=45,racimo5=36,racimo6=35,tamchico=102,peso=26,pudricion=8,flojo=5,mecanico=6,blossom=5,cierre=6,deforme=4,cicatriz=9,insecto_daño=8,daño_virus=1,craking=3,corte=2,golpe=4,exverde=3,arrugado=2,blotchy=2,suelto=1,color_disparejo=2 where fecha BETWEEN '2020-09-08 00:00:00' and '2020-09-08 23:59:00'
 
 select R.id_reg,U.user,I.Nombre,R.num_tunel,R.racimo1,R.racimo2,R.racimo3,R.racimo4,R.racimo5,R.racimo6,R.tamchico,R.peso,R.pudricion,R.flojo,R.mecanico,R.blossom,R.cierre,R.deforme,R.cicatriz,R.insecto_daño,R.insecto_presencia,R.daño_virus,R.craking,R.corte,R.golpe,R.exverde,R.arrugado,R.blotchy,R.suelto,R.color_disparejo,R.fecha,R.lado,R.tiempo from registros16 R,usuarios U,invernaderos I where R.id_user=U.id_user and R.id_inve=I.id_inver and R.id_inve=16 and fecha BETWEEN '2020-09-08 00:00:00' and '2020-09-08 23:59:00'
+
+
+
+
+
+
+
+CREATE TABLE registros13
+(
+    id_reg INT NOT NULL  AUTO_INCREMENT , -- primary key column
+    id_user INT NOT NULL ,
+    id_inve INT NOT NULL  ,
+    num_tunel INT NOT NULL,
+    racimo1 INT NOT NULL,
+    racimo2 INT NOT NULL,
+    racimo3 INT NOT NULL,
+    racimo4 INT NOT NULL,
+    racimo5 INT NOT NULL,
+    racimo6 INT NOT NULL,
+    tamchico INT NOT NULL,
+    lado varchar(2)not null,
+    peso  DECIMAL(5,2)  NULL,
+    pudricion INT NOT NULL,
+    flojo INT NOT NULL,
+    mecanico INT NOT NULL,
+    blossom INT NOT NULL,
+    cierre INT NOT NULL,
+    deforme INT NOT NULL,
+    cicatriz INT NOT NULL,
+    insecto_daño INT NOT NULL,
+    insecto_presencia INT NOT NULL,
+    craking INT NOT NULL,
+    corte INT NOT NULL,
+    golpe INT NOT NULL,
+    exverde INT NOT NULL,
+    color_disparejo INT NOT NULL,
+    arrudago INT NOT NULL,
+    blotchy INT NOT NULL,
+    suelto INT NOT NULL,
+    daño_virus int not null,
+    fecha DATE not null,
+    tiempo TIME,
+    UNIQUE (fecha,id_inve,num_tunel),
+    PRIMARY KEY(id_reg),
+    FOREIGN KEY (id_user) REFERENCES usuarios(id_user),
+    FOREIGN KEY (id_inve) REFERENCES invernaderos(id_inver)
+);
+
+
+CREATE TABLE registros14
+(
+    id_reg INT NOT NULL  AUTO_INCREMENT , -- primary key column
+    id_user INT NOT NULL ,
+    id_inve INT NOT NULL  ,
+    num_tunel INT NOT NULL,
+    racimo1 INT NOT NULL,
+    racimo2 INT NOT NULL,
+    racimo3 INT NOT NULL,
+    racimo4 INT NOT NULL,
+    racimo5 INT NOT NULL,
+    racimo6 INT NOT NULL,
+    tamchico INT NOT NULL,
+    lado varchar(2)not null,
+    peso  DECIMAL(5,2)  NULL,
+    pudricion INT NOT NULL,
+    flojo INT NOT NULL,
+    mecanico INT NOT NULL,
+    blossom INT NOT NULL,
+    cierre INT NOT NULL,
+    deforme INT NOT NULL,
+    cicatriz INT NOT NULL,
+    insecto_daño INT NOT NULL,
+    insecto_presencia INT NOT NULL,
+    craking INT NOT NULL,
+    corte INT NOT NULL,
+    golpe INT NOT NULL,
+    exverde INT NOT NULL,
+    color_disparejo INT NOT NULL,
+    arrudago INT NOT NULL,
+    blotchy INT NOT NULL,
+    suelto INT NOT NULL,
+    daño_virus int not null,
+    fecha DATE not null,
+    tiempo TIME,
+    UNIQUE (fecha,id_inve,num_tunel),
+    PRIMARY KEY(id_reg),
+    FOREIGN KEY (id_user) REFERENCES usuarios(id_user),
+    FOREIGN KEY (id_inve) REFERENCES invernaderos(id_inver)
+);
+
+
+
+
+CREATE TABLE totales14
+(
+    i_total int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    fecha DATE not null,
+    racimo1 INT NOT NULL,
+    racimo2 INT NOT NULL,
+    racimo3 INT NOT NULL,
+    racimo4 INT NOT NULL,
+    racimo5 INT NOT NULL,
+    racimo6 INT NOT NULL,
+    tamchico INT NOT NULL,
+    peso  DECIMAL(5,2)  NULL,
+    pudricion INT NOT NULL,
+    flojo INT NOT NULL,
+    mecanico INT NOT NULL,
+    blossom INT NOT NULL,
+    cierre INT NOT NULL,
+    deforme INT NOT NULL,
+    cicatriz INT NOT NULL,
+    insecto_daño INT NOT NULL,
+    insecto_presencia INT NOT NULL,
+    craking INT NOT NULL,
+    corte INT NOT NULL,
+    golpe INT NOT NULL,
+    exverde INT NOT NULL,
+    color_disparejo INT NOT NULL,
+    arrudago INT NOT NULL,
+    blotchy INT NOT NULL,
+    suelto INT NOT NULL,
+    daño_virus int not null,
+    UNIQUE (fecha)
+
+)
+
+
+SELECT  t.fecha,COUNT(r.id_user) as cantidad from registros12 r, totales12 t where t.fecha='2020-09-10' and  r.fecha='2020-09-10'

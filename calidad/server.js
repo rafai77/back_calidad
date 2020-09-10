@@ -1061,9 +1061,16 @@ app.post('/brix/', verificaTk, (req, res)=> {
     }
     else
     {
-      console.log(req.body)
-     console.log(`SELECT  t.fecha,COUNT(r.id_users) as cantidad from registros r, ${req.body.tabla} t where t.fecha=? and r.fecha=?`)     
-      mysqlConnection.query(`SELECT  t.fecha,COUNT(r.id_user) as cantidad from registros r, ${req.body.tabla} t where t.fecha=? and r.fecha=?`,[req.body.fecha.toString().substr(10),req.body.fecha.toString()], function(error, results, fields) {
+      var regitabla;
+     if(req.body.tabla=="totales11")
+        regitabla="registros"
+      if(req.body.tabla=="totales12")
+        regitabla="registros12"
+      if(req.body.tabla=="totales15")
+        regitabla="registros15"
+
+     //console.log(`SELECT  t.fecha,COUNT(r.id_user) as cantidad from ${regitabla} r, ${req.body.tabla} t where t.fecha='${req.body.fecha.toString().substr(0,10)}' and  r.fecha='${req.body.fecha.toString().substr(0,10)}'` )  
+      mysqlConnection.query(`SELECT  t.fecha,COUNT(r.id_user) as cantidad from ${regitabla} r, ${req.body.tabla} t where t.fecha='${req.body.fecha.toString().substr(0,10)}' and  r.fecha='${req.body.fecha.toString().substr(0,10)}'`, function(error, results, fields) {
         if(!error)
         {
           res.json(
@@ -1103,8 +1110,13 @@ app.put('/blixadd',verificaTk,(req,res)=>
     }
     else
     {
-      let sql=`UPDATE ${req.body.tabla} SET Brix=${parseFloat(req.body.Brix)} ,Brix2=${parseFloat(req.body.Brix2)} where fecha='${req.body.fecha}'`;
-      console.log(`UPDATE ${req.body.tabla} SET Brix=${parseFloat(req.body.Brix)} ,Brix2=${parseFloat(req.body.Brix2)} where fecha='${req.body.fecha}'`)
+      let sql;
+      console.log(req.body.tabla)
+      if(req.body.tabla=="totales12")
+       sql=`UPDATE ${req.body.tabla} SET Brix1=${parseFloat(req.body.Brix1)} ,Brix2=${parseFloat(req.body.Brix2)},Brix3=${parseFloat(req.body.Brix3)} ,Brix4=${parseFloat(req.body.Brix4)} where fecha='${req.body.fecha}'`;
+      else
+       sql=`UPDATE ${req.body.tabla} SET Brix=${parseFloat(req.body.Brix)} ,Brix2=${parseFloat(req.body.Brix2)} where fecha='${req.body.fecha}'`;
+      console.log(sql)
       mysqlConnection.query(sql,function(error, results, fields) {
         console.log(error)
         if(error==null)
