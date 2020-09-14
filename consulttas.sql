@@ -509,3 +509,5 @@ CREATE TABLE totales14
 
 
 SELECT  t.fecha,COUNT(r.id_user) as cantidad from registros12 r, totales12 t where t.fecha='2020-09-10' and  r.fecha='2020-09-10'
+
+mysqldump -u root calidad > calidad.sql
