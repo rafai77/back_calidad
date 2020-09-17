@@ -1981,7 +1981,7 @@ app.post('/addC16', verificaTk, (req, res)=> {
         {
           mysqlConnection.query('select * from totales16 where fecha BETWEEN ? and ?',[f1,f2], function(error, results, fields) {
           
-            if(results==[])
+            if(results==0)
             {
               // se crea el registro 
               mysqlConnection.query("insert into totales16(fecha,racimo1,racimo2,racimo3,racimo4,racimo5,racimo6,tamchico,peso,pudricion,flojo,mecanico,blossom,cierre,deforme,cicatriz,insecto_daño,insecto_presencia,daño_virus,craking,corte,golpe,exverde,arrugado,blotchy,suelto,color_disparejo) SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(racimo1),sum(racimo2),sum(racimo3),sum(racimo4),sum(racimo5),sum(racimo6),sum(tamchico),sum(peso),sum(pudricion),sum(flojo),sum(mecanico),sum(blossom),sum(cierre),sum(deforme),sum(cicatriz),sum(insecto_daño),sum(insecto_presencia),sum(daño_virus),sum(craking),sum(corte),sum(golpe),sum(exverde),sum(arrugado),sum(blotchy),sum(suelto),sum(color_disparejo) from registros16 where fecha BETWEEN ? and ?",[f1,f2], function(error, results, fields) {   
