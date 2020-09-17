@@ -601,7 +601,7 @@ app.post('/addC', verificaTk, (req, res)=> {
         i++;
       }
     console.log(f);
-    var f1=f;
+    var f1=f.toString();
     f1=f.split(" ");
     f=f.substr(10);
     f1=f1[0];
