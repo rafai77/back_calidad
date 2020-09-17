@@ -706,6 +706,7 @@ app.put('/actualizar/', verificaTk, (req, res)=> {
       console.log(data);
       var regi="";
       var i=0;
+      var fechaaa=""
       for (var prop in data) {
         if(prop=='lado')
         {
@@ -713,7 +714,10 @@ app.put('/actualizar/', verificaTk, (req, res)=> {
         }
         else{
           if(prop=='fecha')
-          regi+=prop+"='"+data[prop]+"',";
+          {
+            regi+=prop+"='"+data[prop]+"',";
+            fechaaa=data[prop];
+          }
           else
           regi+=prop+"="+data[prop]+",";
         }
@@ -729,6 +733,7 @@ app.put('/actualizar/', verificaTk, (req, res)=> {
       mysqlConnection.query(regi, function(error, results, fields) {
         if(!error)
         {
+          acttotales11(fechaaa)
           res.json(
             {
               Id_user: `${idu}`,
@@ -1001,6 +1006,7 @@ app.put('/actualizar12/', verificaTk, (req, res)=> {
       console.log(data);
       var regi="";
       var i=0;
+      var fechi=""
       for (var prop in data) {
         if(prop=='lado')
         {
@@ -1008,7 +1014,11 @@ app.put('/actualizar12/', verificaTk, (req, res)=> {
         }
         else{
           if(prop=='fecha')
-          regi+=prop+"='"+data[prop]+"',";
+          {
+            fechi=data[prop];
+            regi+=prop+"='"+data[prop]+"',";
+          }
+          
           else
           regi+=prop+"="+data[prop]+",";
         }
@@ -1590,6 +1600,7 @@ app.put('/actualizar15/', verificaTk, (req, res)=> {
       console.log(data);
       var regi="";
       var i=0;
+      var fechi
       for (var prop in data) {
         if(prop=='lado')
         {
@@ -1597,7 +1608,11 @@ app.put('/actualizar15/', verificaTk, (req, res)=> {
         }
         else{
           if(prop=='fecha')
-          regi+=prop+"='"+data[prop]+"',";
+          {
+            regi+=prop+"='"+data[prop]+"',";
+            fechi=data[prop];
+          }
+        
           else
           regi+=prop+"="+data[prop]+",";
         }
@@ -1613,6 +1628,7 @@ app.put('/actualizar15/', verificaTk, (req, res)=> {
       mysqlConnection.query(regi, function(error, results, fields) {
         if(!error)
         {
+          acttotales15(fechi)
           res.json(
             {
               Id_user: `${idu}`,
@@ -2101,3 +2117,153 @@ function acttotales16(fecha)
     }
     });
 }
+
+function acttotales15(fecha)
+{
+  var f1=fecha;
+  f1=fecha.split(" ");
+  f=fecha.substr(10);
+  f1=f1[0];
+  console.log(fecha);
+  var f2=f1
+  f1+=" 00:00:00";
+  f2+=" 23:59:00";   
+  mysqlConnection.query('select * from totales15 where fecha BETWEEN ? and ?',[f1,f2], function(error, results, fields) {
+          
+    if(results.length==0)
+    {
+      // se crea el registro 
+      mysqlConnection.query("insert into totales15(fecha,num_color3,num_color4,num_color5,tamchico,Brix,Brix2,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz ) SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(num_color3),sum(num_color4),sum(num_color5),sum(tamchico),sum(0),sum(0),sum(pudricion),sum(tallo),sum(flojo),sum(mecanico),sum(blossom),sum(reventado),sum(cierre),sum(deforme),sum(cicatriz),sum(insecto),sum(color_disparejo),sum(caliz),sum(viruz) from registros15 where fecha BETWEEN ? and ?",[f1,f2], function(error, results, fields) {   
+        console.log(results);
+      });
+      console.log("no existe el registro del total para ese dia");
+    }
+    else
+    {
+      mysqlConnection.query("SELECT sum(num_color3)num_color3,sum(num_color4)as num_color4,sum(num_color5)num_color5,sum(tamchico)as tamchico,sum(0)as Brix,sum(0)as Brix2,sum(pudricion)as pudricion,sum(tallo)as tallo,sum(flojo) as flojo,sum(mecanico)as mecanico,sum(blossom)as blossom,sum(reventado)as reventado,sum(cierre)as cierre,sum(deforme)as deforme,sum(cicatriz)as cicatriz,sum(insecto)as insecto,sum(color_disparejo)as color_disparejo,sum(caliz)as caliz,sum(viruz)as viruz  from registros15 where fecha BETWEEN ? and ?",[f1,f2], function(error, row, fields) {   
+        //actualiza
+        console.log(row)
+        var regi="";
+        var i=0;
+        for (var prop in row[0])
+        {
+          regi+=prop+"="+row[0][prop]+",";
+        }
+        regi=regi.substr(0,regi.length-1);
+        console.log(regi);
+        regi="UPDATE totales15 set "+regi+" where fecha BETWEEN '"+f1+"' and '"+f2+"'"
+        console.log(regi);
+        mysqlConnection.query(regi, function(error, results, fields) {
+        console.log(results);
+
+        });
+
+        console.log(results);
+      });
+      console.log("solo se debe actualizar ");
+    }
+    });
+
+}
+
+function acttotales12(fecha)
+{
+  var f1=fecha;
+  f1=fecha.split(" ");
+  f=fecha.substr(10);
+  f1=f1[0];
+  console.log(fecha);
+  var f2=f1
+  f1+=" 00:00:00";
+  f2+=" 23:59:00";   
+  mysqlConnection.query('select * from totales12 where fecha BETWEEN ? and ?',[f1,f2], function(error, results, fields) {
+          
+    if(results.length==0)
+    {
+      // se crea el registro 
+      mysqlConnection.query("insert into totales12(fecha,num_color3,num_color4,num_color5,tamchico,Brix1,Brix2,Brix3,Brix4,peso,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz ) SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(num_color3),sum(num_color4),sum(num_color5),sum(tamchico),sum(0),sum(0),sum(0),sum(0),sum(peso),sum(pudricion),sum(tallo),sum(flojo),sum(mecanico),sum(blossom),sum(reventado),sum(cierre),sum(deforme),sum(cicatriz),sum(insecto),sum(color_disparejo),sum(caliz),sum(viruz) from registros12 where fecha BETWEEN ? and ?",[f1,f2], function(error, results, fields) {   
+        console.log(results);
+      });
+      console.log("no existe el registro del total para ese dia");
+    }
+    else
+    {
+      mysqlConnection.query("SELECT sum(num_color3) as num_color3,sum(num_color4)as num_color4,sum(num_color5)num_color5,sum(tamchico)as tamchico,sum(0) as Brix1,sum(0) as Brix2,sum(0) as Brix3,sum(0) as Brix4,sum(peso)as peso,sum(pudricion)as pudricion,sum(tallo)as tallo,sum(flojo) as flojo,sum(mecanico)as mecanico,sum(blossom)as blossom,sum(reventado)as reventado,sum(cierre)as cierre,sum(deforme)as deforme,sum(cicatriz)as cicatriz,sum(insecto)as insecto,sum(color_disparejo)as color_disparejo,sum(caliz)as caliz,sum(viruz)as viruz  from registros12 where fecha BETWEEN ? and ?",[f1,f2], function(error, row, fields) {   
+        //actualiza
+        console.log(row)
+        var regi="";
+        var i=0;
+        for (var prop in row[0])
+        {
+          regi+=prop+"="+row[0][prop]+",";
+        }
+        regi=regi.substr(0,regi.length-1);
+        console.log(regi);
+        regi="UPDATE totales12 set "+regi+" where fecha BETWEEN '"+f1+"' and '"+f2+"'"
+        console.log(regi);
+        mysqlConnection.query(regi, function(error, results, fields) {
+        console.log(results);
+
+        });
+
+        console.log(results);
+      });
+      console.log("solo se debe actualizar ");
+    }
+    }); 
+
+}
+
+function acttotales11(fecha)
+{
+  var f1=fecha;
+  f1=fecha.split(" ");
+  f=fecha.substr(10);
+  f1=f1[0];
+  console.log(fecha);
+  var f2=f1
+  f1+=" 00:00:00";
+  f2+=" 23:59:00";    
+
+  mysqlConnection.query('select * from totales11 where fecha BETWEEN ? and ?',[f1,f2], function(error, results, fields) {
+    console.log(error)
+    if(results.length==0)
+    {
+      // se crea el registro }
+      let sql="insert into totales11(fecha,num_color3,num_color4,num_color5,tamchico,Brix,Brix2,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz ) SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(num_color3),sum(num_color4),sum(num_color5),sum(tamchico),sum(0),sum(0),sum(pudricion),sum(tallo),sum(flojo),sum(mecanico),sum(blossom),sum(reventado),sum(cierre),sum(deforme),sum(cicatriz),sum(insecto),sum(color_disparejo),sum(caliz),sum(viruz) from registros where fecha BETWEEN '"+f1+"' and '"+f2+"'"
+      mysqlConnection.query(sql, function(error, results, fields) {   
+        console.log(error)
+        console.log(results);
+      });
+      console.log("no existe el registro del total para ese dia");
+    }
+    else
+    {
+      mysqlConnection.query("SELECT sum(num_color3)num_color3,sum(num_color4)as num_color4,sum(num_color5)num_color5,sum(tamchico)as tamchico,sum(0)as Brix,sum(0)as Brix2,sum(pudricion)as pudricion,sum(tallo)as tallo,sum(flojo) as flojo,sum(mecanico)as mecanico,sum(blossom)as blossom,sum(reventado)as reventado,sum(cierre)as cierre,sum(deforme)as deforme,sum(cicatriz)as cicatriz,sum(insecto)as insecto,sum(color_disparejo)as color_disparejo,sum(caliz)as caliz,sum(viruz)as viruz  from registros where fecha BETWEEN ? and ?",[f1,f2], function(error, row, fields) {   
+        console.log(error)
+        console.log(row)
+        var regi="";
+        var i=0;
+        for (var prop in row[0])
+        {
+          regi+=prop+"="+row[0][prop]+",";
+        }
+        regi=regi.substr(0,regi.length-1);
+        console.log(regi);
+        regi="UPDATE totales11 set "+regi+" where fecha BETWEEN '"+f1+"' and '"+f2+"'"
+        console.log(regi);
+        mysqlConnection.query(regi, function(error, results, fields) {
+          console.log(error)
+
+          console.log(results);
+
+
+        });
+
+        console.log(results);
+      });
+      console.log("solo se debe actualizar ");
+    }
+    });
+}
+
