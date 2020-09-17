@@ -2054,11 +2054,10 @@ app.post('/addC16', verificaTk, (req, res)=> {
 function acttotales16(fecha)
 {
   var f1=fecha;
-  f1=f.split(" ");
-  f=f.substr(10);
+  f1=fecha.split(" ");
+  f=fecha.substr(10);
   f1=f1[0];
-  console.log(f);
-  regi[i]=f;
+  console.log(fecha);
   var f2=f1
   f1+=" 00:00:00";
   f2+=" 23:59:00";    
