@@ -617,11 +617,12 @@ app.post('/addC', verificaTk, (req, res)=> {
         {
           //actualizar el total 
           mysqlConnection.query('select * from totales11 where fecha BETWEEN ? and ?',[f1,f2], function(error, results, fields) {
-          
+          console.log(error)
           if(results.length==0)
           {
             // se crea el registro 
             mysqlConnection.query("insert into totales11(fecha,num_color3,num_color4,num_color5,tamchico,Brix,Brix2,pudricion,tallo,flojo,mecanico,blossom,reventado,cierre,deforme,cicatriz,insecto,color_disparejo,caliz,viruz ) SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(num_color3),sum(num_color4),sum(num_color5),sum(tamchico),sum(0),sum(0),sum(pudricion),sum(tallo),sum(flojo),sum(mecanico),sum(blossom),sum(reventado),sum(cierre),sum(deforme),sum(cicatriz),sum(insecto),sum(color_disparejo),sum(caliz),sum(viruz) from registros where fecha BETWEEN ? and ?",[f1,f2], function(error, results, fields) {   
+              console.log(error)
               console.log(results);
             });
             console.log("no existe el registro del total para ese dia");
@@ -629,7 +630,7 @@ app.post('/addC', verificaTk, (req, res)=> {
           else
           {
             mysqlConnection.query("SELECT sum(num_color3)num_color3,sum(num_color4)as num_color4,sum(num_color5)num_color5,sum(tamchico)as tamchico,sum(0)as Brix,sum(0)as Brix2,sum(pudricion)as pudricion,sum(tallo)as tallo,sum(flojo) as flojo,sum(mecanico)as mecanico,sum(blossom)as blossom,sum(reventado)as reventado,sum(cierre)as cierre,sum(deforme)as deforme,sum(cicatriz)as cicatriz,sum(insecto)as insecto,sum(color_disparejo)as color_disparejo,sum(caliz)as caliz,sum(viruz)as viruz  from registros where fecha BETWEEN ? and ?",[f1,f2], function(error, row, fields) {   
-              //actualiza
+              console.log(error)
               console.log(row)
               var regi="";
               var i=0;
@@ -642,7 +643,10 @@ app.post('/addC', verificaTk, (req, res)=> {
               regi="UPDATE totales11 set "+regi+" where fecha BETWEEN '"+f1+"' and '"+f2+"'"
               console.log(regi);
               mysqlConnection.query(regi, function(error, results, fields) {
-              console.log(results);
+                console.log(error)
+
+                console.log(results);
+
 
               });
 
