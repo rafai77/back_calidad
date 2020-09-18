@@ -2267,3 +2267,68 @@ function acttotales11(fecha)
     });
 }
 
+
+
+
+// 13
+
+app.post('/infocolum13', verificaTk, (req, res)=> {
+  jwt.verify(req.token,secret,(err,data)=>
+    {
+      if(err)
+      {
+       
+        res.sendStatus(403);
+      }
+      else
+      {
+        var c=req.body.c;
+        var f1=req.body.f1+" 00:00:00";
+        var f2=req.body.f2+" 23:59:59";
+        console.log(f1,f2,c);
+        var resul=[]
+        var sql="";
+        var campos=""
+        var aux;
+        for(var i in c)
+        {
+           campos+=c[i]+","
+        }
+        sql="select "+campos+"DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha from totales13 where fecha BETWEEN '"+f1+"' and '"+f2+"' ";
+       console.log(sql);
+        mysqlConnection.query(sql, function(error, results, fields) {
+         // console.log(results)
+          for (var i in results)
+          {
+            for(var j in results[i])
+            {
+              if(j!='fecha')
+              {
+                resul.push(
+                  {
+                    "fecha":results[i]["fecha"],
+                    "campo":j,
+                    "valor":results[i][j]
+                  }
+                );
+              }
+            }
+          }
+          console.log(resul);
+         res.json(resul);
+         });
+  };
+  });
+});
+
+
+///
+
+app.get("/hola",(req,res)=>
+{
+  console.log(req.body)
+  res.json({
+    "nombre":"sdf",
+  })
+
+})
