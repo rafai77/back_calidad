@@ -511,3 +511,7 @@ CREATE TABLE totales14
 SELECT  t.fecha,COUNT(r.id_user) as cantidad from registros12 r, totales12 t where t.fecha='2020-09-10' and  r.fecha='2020-09-10'
 
 mysqldump -u root calidad > calidad.sql
+
+
+INSERT INTO registros13(id_user,id_inve,num_tunel,racimo1,racimo2,racimo3,racimo4,racimo5,racimo6,tamchico,peso,pudricion,flojo,mecanico,blossom,cierre,deforme,cicatriz,insecto_daño,insecto_presencia,dano_virus,craking,corte,golpe,exverde,arrugado,blotchy,suelto,color_disparejo,fecha,lado,tiempo) VALUES(7, 13, 25, 1, 38, 25, 5, 8, 8, 84, 
+8, 0, 2, 2, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, '2020-09-18 12:12:39.263630', 'S', ' 12:12:39.263630')

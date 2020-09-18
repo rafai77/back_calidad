@@ -2322,6 +2322,365 @@ app.post('/infocolum13', verificaTk, (req, res)=> {
 });
 
 
+app.post('/datos13', verificaTk, (req, res)=> {
+  jwt.verify(req.token,secret,(err,data)=>
+  {
+    if(err)
+    {
+     
+      res.sendStatus(403);
+    }
+    else
+    {
+     
+      mysqlConnection.query('select * from invernaderos where Nombre=?',[req.body.name], function(error, results, fields) {
+        
+        if (results.length>0) // quiere decir que se econtro un usuario
+        {
+          
+          if(!results){
+            res.json(results);          
+        } else{
+          let idi=results[0].id_inver;
+          console.log(idi);
+          var mydatei =req.body.fecha.toString().split(" ")
+          var mydatef =req.body.fecha.toString().split(" ")
+          mydatei=mydatei[0];
+          mydatef=mydatef[0];
+          mydatei+=" 00:00:00";
+          mydatef+=" 23:59:59"
+          console.log(mydatei);
+          console.log(mydatef);
+          mysqlConnection.query("select R.id_reg,U.user,I.Nombre,R.num_tunel,R.racimo1,R.racimo2,R.racimo3,R.racimo4,R.racimo5,R.racimo6,R.tamchico,R.peso,R.pudricion,R.flojo,R.mecanico,R.blossom,R.cierre,R.deforme,R.cicatriz,R.insecto_daño,R.insecto_presencia,R.daño_virus,R.craking,R.corte,R.golpe,R.exverde,R.arrugado,R.blotchy,R.suelto,R.color_disparejo,R.fecha,R.lado,R.tiempo from registros13 R,usuarios U,invernaderos I where R.id_user=U.id_user and R.id_inve=I.id_inver and R.id_inve=? and fecha BETWEEN ? AND ?",[idi,mydatei,mydatef], function(error, results, fields) {
+            if (results.length>0) // quiere decir que se econtro un usuario
+        {
+          console.log(results);
+          if(!results){
+            res.json(results);          
+        } else
+        {
+          res.json(results);          
+        }
+      }
+      else{
+        res.json(
+          {
+            'Status':results.length
+          }
+          
+
+        );
+      }
+
+          });
+        }
+        }
+      });
+      
+    }
+
+  });       
+});
+
+
+app.put('/actualizar13/', verificaTk, (req, res)=> {
+  jwt.verify(req.token,secret,(err,data)=>
+  {
+    if(err)
+    {
+      res.json(
+        {
+          log: false,
+          User: null,
+          error: true,
+          status: 'no se puede actualizar una caja asi iniciar sesion por favor'
+        }
+      )
+    }
+    else
+    {
+      data=req.body.REG;
+      data=JSON.parse(data);
+      console.log(data);
+      var regi="";
+      var i=0;
+      var fechasA
+      for (var prop in data) {
+        
+        if(prop=='lado')
+        {
+          regi+=prop+"='"+data[prop]+"',";
+        }
+        else{
+          if(prop=='arrudago')
+            regi+="arrugado="+data[prop]+",";
+            else
+              if(prop=='fecha')
+              {
+                regi+=prop+"='"+data[prop]+"',";
+                fechasA=data[prop];
+              }
+                
+              else
+                regi+=prop+"="+data[prop]+",";
+        }
+      }
+    console.log(regi[regi.length-1]);
+    regi=regi.substr(0,regi.length-1);
+    console.log(regi);
+   // print(asd);
+    regi="UPDATE registros13 set "+regi+" where id_reg="+req.body.id.toString();
+      //console.log(data);
+      mysqlConnection.query(regi, function(error, results, fields) {
+        if(!error)
+        {
+          acttotales16(fechasA);
+          res.json(
+            {
+              Id_user: `${idu}`,
+              error: false,
+              status: 'tunel actualizado'
+    
+            }
+          )
+        }
+        else
+        {
+          console.log(error)
+          res.json({
+              Cajas: "error",
+              Id_user:"error",
+              error: true,
+              status: 'tunel no actualizado'
+          }
+          )
+        }
+
+        
+      });
+    }
+
+  });       
+});
+
+
+app.post('/registros13', verificaTk, (req, res)=> {
+  jwt.verify(req.token,secret,(err,data)=>
+  {
+    if(err)
+    {
+     
+      res.sendStatus(403);
+    }
+    else
+    {
+     
+      mysqlConnection.query('select * from invernaderos where Nombre=?',[req.body.name], function(error, results, fields) {
+        
+        if (results.length>0) // quiere decir que se econtro un usuario
+        {
+          
+          if(!results){
+            res.json(results);          
+        } else{
+          let idi=results[0].id_inver;
+          console.log(idi);
+          var mydatei =req.body.fecha.toString().split(" ")
+          var mydatef =req.body.fecha.toString().split(" ")
+          mydatei=mydatei[0];
+          mydatef=mydatef[0];
+          mydatei+=" 00:00:00";
+          mydatef+=" 23:59:59"
+          console.log(mydatei);
+          console.log(mydatef);
+          mysqlConnection.query("select * from registros13 where id_inve=? and fecha BETWEEN ? AND ?",[idi,mydatei,mydatef], function(error, results, fields) {
+            if (results.length>0) // quiere decir que se econtro un usuario
+        {
+          console.log(results);
+          if(!results){
+            res.json(results);          
+        } else
+        {
+          res.json(results);          
+        }
+      }
+      else{
+        res.json(
+          {
+            'Status':results.length
+          }
+          
+
+        );
+      }
+
+          });
+        }
+        }
+      });
+      
+    }
+
+  });       
+});
+
+
+app.delete('/borrar13/:id', verificaTk, (req, res)=> {
+  jwt.verify(req.token,secret,(err,data)=>
+  {
+    if(err)
+    {
+      res.json(
+        {
+          log: false,
+          User: null,
+          error: true,
+          status: 'no se puede borrar un tunel asi iniciar sesion por favor'
+        }
+      )
+    }
+    console.log(req.params.id);
+    var id=req.params.id;
+      //console.log(data);
+      mysqlConnection.query("Delete From registros13 where id_reg=?", [id],function(error, results, fields) {
+        if(!error)
+        {
+          res.json(
+            {
+              Id_user: `${idu}`,
+              error: false,
+              status: 'tunel actualizado'
+            }
+          )
+        }
+        else
+        {
+          console.log(error)
+          res.json({
+              Cajas: "error",
+              Id_user:"error",
+              error: true,
+              status: 'tunel no actualizado'
+          }
+          )
+        }
+      });
+  });       
+});
+
+app.post('/addC13', verificaTk, (req, res)=> {
+  jwt.verify(req.token,secret,(err,data)=>
+  {
+    if(err)
+    {
+      res.json(
+        {
+          log: false,
+          User: null,
+          error: true,
+          status: 'no se puede registrar una caja asi iniciar sesion por favor'
+        }
+      )
+    }
+    else
+    {
+      data=req.body.REG;
+      data=JSON.parse(data);
+      console.log(data);
+      var regi=[];
+      var i=0;
+      var f="";
+      for (var prop in data) {
+        regi[i]=data[prop];
+        if(prop=='fecha')
+        f=data[prop];
+        i++;
+        //console.log(prop,data[prop])
+        
+    }
+    //console.log(f);
+    var f1=f;
+    f1=f.split(" ");
+    f=f.substr(10);
+    f1=f1[0];
+    console.log(f);
+    regi[i]=f;
+    var f2=f1
+    f1+=" 00:00:00";
+    f2+=" 23:59:00";    
+    console.log(f1,f2);
+      //console.log(data);
+      mysqlConnection.query('INSERT INTO registros13(id_user,id_inve,num_tunel,racimo1,racimo2,racimo3,racimo4,racimo5,racimo6,tamchico,peso,pudricion,flojo,mecanico,blossom,cierre,deforme,cicatriz,insecto_daño,insecto_presencia,dano_virus,craking,corte,golpe,exverde,arrugado,blotchy,suelto,color_disparejo,fecha,lado,tiempo) VALUES(?)', [regi], function(error, results, fields) {
+        if(!error)
+        {
+          mysqlConnection.query('select * from totales13 where fecha BETWEEN ? and ?',[f1,f2], function(error, results, fields) {
+          
+            if(results==0)
+            {
+              // se crea el registro 
+              mysqlConnection.query("insert into totales13(fecha,racimo1,racimo2,racimo3,racimo4,racimo5,racimo6,tamchico,peso,pudricion,flojo,mecanico,blossom,cierre,deforme,cicatriz,insecto_daño,insecto_presencia,daño_virus,craking,corte,golpe,exverde,arrugado,blotchy,suelto,color_disparejo) SELECT DATE_FORMAT(fecha ,'%Y-%m-%d')as fecha,sum(racimo1),sum(racimo2),sum(racimo3),sum(racimo4),sum(racimo5),sum(racimo6),sum(tamchico),sum(peso),sum(pudricion),sum(flojo),sum(mecanico),sum(blossom),sum(cierre),sum(deforme),sum(cicatriz),sum(insecto_daño),sum(insecto_presencia),sum(daño_virus),sum(craking),sum(corte),sum(golpe),sum(exverde),sum(arrugado),sum(blotchy),sum(suelto),sum(color_disparejo) from registros13 where fecha BETWEEN ? and ?",[f1,f2], function(error, results, fields) {   
+                console.log(error);
+                console.log(results);
+              });
+              console.log("no existe el registro del total para ese dia");
+            }
+            else
+            {
+              mysqlConnection.query(" SELECT sum(racimo1) as racimo1,sum(racimo2) as racimo2,sum(racimo3) as racimo3,sum(racimo4) as racimo4,sum(racimo5) as racimo5,sum(racimo6) as racimo6,sum(tamchico) as tamchico ,sum(peso) as peso,sum(pudricion) as pudricion,sum(flojo) as flojo,sum(mecanico) as mecanico,sum(blossom) as blossom,sum(cierre) as cierre ,sum(deforme)as deforme,sum(cicatriz) as cicatriz,sum(insecto_daño) as insecto_daño ,sum(insecto_presencia) as insecto_daño ,sum(daño_virus) as daño_virus ,sum(craking) as craking,sum(corte) as corte ,sum(golpe) as golpe ,sum(exverde) as exverde ,sum(arrugado) as arrugado ,sum(blotchy) as blotchy,sum(suelto) as suelto,sum(color_disparejo) as color_disparejo from registros13 where fecha BETWEEN  ? and ?",[f1,f2], function(error, row, fields) {   
+                //actualiza
+                console.log(error);
+                console.log(row)
+                var regi="";
+                var i=0;
+                for (var prop in row[0])
+                {
+                  regi+=prop+"="+row[0][prop]+",";
+                }
+                regi=regi.substr(0,regi.length-1);
+                console.log(regi);
+                regi="UPDATE totales13 set "+regi+" where fecha BETWEEN '"+f1+"' and '"+f2+"'"
+                console.log(regi);
+                mysqlConnection.query(regi, function(error, results, fields) {
+                  console.log(error);
+                console.log(results);
+  
+                });
+  
+                console.log(results);
+              });
+              console.log("solo se debe actualizar ");
+            }
+            });
+            res.json(
+              {
+                Id_user: `${idu}`,
+                error: false,
+                status: 'surco agregado'
+      
+              }
+            )
+        }
+        else
+        {
+          console.log(error)
+          res.json({
+              Cajas: "error",
+              Id_user:"error",
+              error: true,
+              status: 'cajas no anotadas'
+          }
+          )
+        }
+
+        
+      });
+    }
+
+  });       
+});
+
+
+
 ///
 
 app.get("/hola",(req,res)=>
